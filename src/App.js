@@ -84,7 +84,7 @@ export default App;
 
 // Styled Components
 const Container = styled.div`
-  font-family: 'Arial, sans-serif';
+  font-family: 'Roboto', sans-serif;
   color: #333;
   text-align: center;
 `;
@@ -96,6 +96,7 @@ const Header = styled.header`
   padding: 1rem 2rem;
   background-color: #000000;
   color: #fff;
+  font-family: 'Poppins', sans-serif;
 `;
 
 const Nav = styled.nav`
@@ -103,6 +104,7 @@ const Nav = styled.nav`
     color: #fff;
     text-decoration: none;
     margin: 0 1rem;
+    font-family: 'Poppins', sans-serif;
 
     &:hover {
       text-decoration: underline;
@@ -124,6 +126,7 @@ const HeroSection = styled.section`
 const HeroContent = styled.div`
   max-width: 600px;
   margin-bottom: 2rem;
+  font-family: 'Roboto', sans-serif;
 `;
 
 const CanvasContainer = styled.div`
@@ -134,10 +137,12 @@ const CanvasContainer = styled.div`
 const AboutSection = styled.section`
   padding: 4rem 2rem;
   background-color: #f9f9f9;
+  font-family: 'Roboto', sans-serif;
 `;
 
 const ProjectsSection = styled.section`
   padding: 4rem 2rem;
+  font-family: 'Roboto', sans-serif;
 `;
 
 const ProjectCard = styled.div`
@@ -148,6 +153,7 @@ const ProjectCard = styled.div`
   max-width: 400px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
+  font-family: 'Roboto', sans-serif;
 
   &:hover {
     transform: scale(1.05);
@@ -158,6 +164,7 @@ const ProjectCard = styled.div`
 const ContactSection = styled.section`
   padding: 4rem 2rem;
   background-color: #f9f9f9;
+  font-family: 'Roboto', sans-serif;
 
   a {
     color: #6C63FF;
@@ -173,4 +180,5 @@ const Footer = styled.footer`
   padding: 1rem 2rem;
   background-color: #333;
   color: #fff;
+  font-family: 'Roboto', sans-serif;
 `;
