@@ -18,7 +18,7 @@ const App = () => {
       id: 1,
       title: 'Chic Station',
       description: 'This is a cool project.',
-      image: '/sample.jpg', // Replace with your project image path
+      image: './sample.jpg', // Replace with your project image path
       link: 'https://stationchic-reservation.vercel.app/', // Replace with your project link
       animation: projectAnimation,
     },
