@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial, Plane } from '@react-three/drei';
 import styled from 'styled-components';
+import Lottie from 'lottie-react';
+import animationData from './Animation - 1737101876576.json'; // Replace with your Lottie animation file
 
 const App = () => {
   const [hovered, setHovered] = useState(false);
@@ -21,6 +23,9 @@ const App = () => {
         <HeroContent>
           <h2>Welcome to My Interactive Portfolio</h2>
           <p>Explore my projects and learn more about me!</p>
+          <LottieContainer>
+            <Lottie animationData={animationData} loop={true} />
+          </LottieContainer>
         </HeroContent>
         <CanvasContainer>
           <Canvas>
@@ -96,7 +101,6 @@ const Header = styled.header`
   padding: 1rem 2rem;
   background-color: #000000;
   color: #fff;
-  font-family: 'Poppins', sans-serif;
 `;
 
 const Nav = styled.nav`
@@ -104,7 +108,6 @@ const Nav = styled.nav`
     color: #fff;
     text-decoration: none;
     margin: 0 1rem;
-    font-family: 'Poppins', sans-serif;
 
     &:hover {
       text-decoration: underline;
@@ -126,7 +129,12 @@ const HeroSection = styled.section`
 const HeroContent = styled.div`
   max-width: 600px;
   margin-bottom: 2rem;
-  font-family: 'Roboto', sans-serif;
+`;
+
+const LottieContainer = styled.div`
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
 `;
 
 const CanvasContainer = styled.div`
@@ -137,12 +145,10 @@ const CanvasContainer = styled.div`
 const AboutSection = styled.section`
   padding: 4rem 2rem;
   background-color: #f9f9f9;
-  font-family: 'Roboto', sans-serif;
 `;
 
 const ProjectsSection = styled.section`
   padding: 4rem 2rem;
-  font-family: 'Roboto', sans-serif;
 `;
 
 const ProjectCard = styled.div`
@@ -153,7 +159,6 @@ const ProjectCard = styled.div`
   max-width: 400px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  font-family: 'Roboto', sans-serif;
 
   &:hover {
     transform: scale(1.05);
@@ -164,7 +169,6 @@ const ProjectCard = styled.div`
 const ContactSection = styled.section`
   padding: 4rem 2rem;
   background-color: #f9f9f9;
-  font-family: 'Roboto', sans-serif;
 
   a {
     color: #6C63FF;
@@ -180,5 +184,4 @@ const Footer = styled.footer`
   padding: 1rem 2rem;
   background-color: #333;
   color: #fff;
-  font-family: 'Roboto', sans-serif;
 `;
