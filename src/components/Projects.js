@@ -1,34 +1,24 @@
-// Projects.js
-import React from 'react';
-import { motion } from 'framer-motion';
+import projectAnimation from './Animation - 1737107473256.json'; 
+import sample from './sample.jpg'// Replace with your project's Lottie animation file
+
 
 const projects = [
-  { title: 'Project 1', description: 'Cool 3D project.', link: '#' },
-  { title: 'Project 2', description: 'React interactive site.', link: '#' },
-];
+    {
+      id: 1,
+      title: 'Chic Station',
+      description: 'This is a cool project.',
+      image: sample, // Replace with your project image path
+      link: 'https://stationchic-reservation.vercel.app/', // Replace with your project link
+      animation: projectAnimation,
+    },
+    {
+      id: 2,
+      title: 'Project 2',
+      description: 'This is another amazing project.',
+      image: '/project2.png', // Replace with your project image path
+      link: 'https://example.com/project2', // Replace with your project link
+      animation: projectAnimation,
+    },
+  ];
 
-const Projects = () => {
-  return (
-    <section className="projects-section">
-      <h2>Projects</h2>
-      <div className="project-cards">
-        {projects.map((project, index) => (
-          <motion.div
-            className="project-card"
-            key={index}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <h3>{project.title}</h3>
-            <p>{project.description}</p>
-            <a href={project.link} target="_blank" rel="noreferrer">
-              View Project
-            </a>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-};
-
-export default Projects;
+  export default projects;
