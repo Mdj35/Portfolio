@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Sphere, MeshDistortMaterial, Plane } from '@react-three/drei';
 import Lottie from 'lottie-react';
-import projects from './Components/Projects';
+import projects from './Component/Projects';
 import { motion } from 'framer-motion'; // Import framer-motion
 import animationData from './Animation - 1737101876576.json'; 
 import { FaFacebook, FaInstagram, FaEnvelope, FaPhone } from 'react-icons/fa'; // Font Awesome Icons
