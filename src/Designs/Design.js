@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled , { keyframes } from 'styled-components';
 
 const Container = styled.div`
   font-family: 'Roboto', sans-serif;
@@ -135,6 +135,8 @@ const ImageWrapper = styled.div`
   max-width: 200px;
   max-height: 200px;
   overflow: hidden;
+              
+
 
   img {
     width: 100%;
@@ -247,7 +249,62 @@ export const SplashScreenWrapper = styled.div`
   background: linear-gradient(135deg, #000000, #8C8EFF); // aground color of the splash screen
   z-index: 9999; // Ensure it appears above everything
 `;
+export const CertificatesSection = styled.section`
+  padding: 3rem 2rem;
+  background-color: #f8f9fa;
+  text-align: center;
 
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+`;
+
+export const CertificateList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+`;
+
+export const CertificateCard = styled.div`
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: translateY(-10px);
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+    margin: 1rem 0;
+  }
+
+  p {
+    font-size: 1rem;
+    padding: 0 1rem 1rem;
+    color: #666;
+  }
+`;
+
+
+
+
+export const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 
 export {Container,
