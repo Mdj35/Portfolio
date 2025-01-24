@@ -1,4 +1,4 @@
-import styled , { keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const Container = styled.div`
   font-family: 'Roboto', sans-serif;
@@ -13,7 +13,14 @@ const Header = styled.header`
   padding: 1rem 2rem;
   background-color: #000000;
   color: #fff;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 1rem;
+    align-items: flex-start;
+  }
 `;
+
 const Nav = styled.nav`
   a {
     color: #fff;
@@ -22,6 +29,10 @@ const Nav = styled.nav`
 
     &:hover {
       text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      margin: 0.5rem;
     }
   }
 `;
@@ -35,11 +46,20 @@ const HeroSection = styled.section`
   background: linear-gradient(135deg, #000000, #8C8EFF);
   color: #fff;
   text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
 `;
 
 const HeroContent = styled.div`
   max-width: 600px;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 1rem;
+  }
 `;
 
 const LottieContainer = styled.div`
@@ -53,16 +73,30 @@ const LottieContainer = styled.div`
     width: 100%;
     height: 100%;
   }
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 const CanvasContainer = styled.div`
   width: 300px;
   height: 300px;
+
+  @media (max-width: 768px) {
+    width: 200px;
+    height: 200px;
+  }
 `;
 
 const AboutSection = styled.section`
   padding: 4rem 2rem;
   background-color: #f9f9f9;
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
 `;
 
 const ProjectsSection = styled.section`
@@ -73,10 +107,14 @@ const ProjectsSection = styled.section`
     font-size: 2rem;
     margin-bottom: 2rem;
   }
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
 `;
-
-
-
 
 const ContactSection = styled.section`
   padding: 4rem 2rem;
@@ -90,13 +128,22 @@ const ContactSection = styled.section`
       text-decoration: underline;
     }
   }
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+  }
 `;
 
 const Footer = styled.footer`
   padding: 1rem 2rem;
   background-color: #333;
   color: #fff;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
+
 const ProjectCard = styled.div`
   background-color: #fff;
   border: 1px solid #ddd;
@@ -121,6 +168,17 @@ const ProjectCard = styled.div`
     font-size: 1rem;
     color: #666;
   }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 0.8rem;
+    h3 {
+      font-size: 1.3rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
 `;
 
 const ContentWrapper = styled.div`
@@ -129,14 +187,16 @@ const ContentWrapper = styled.div`
   align-items: center;
   justify-content: center;
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `;
 
 const ImageWrapper = styled.div`
   max-width: 200px;
   max-height: 200px;
-  overflow: hidden;
-              
-
 
   img {
     width: 100%;
@@ -144,16 +204,25 @@ const ImageWrapper = styled.div`
     border-radius: 8px;
     object-fit: cover;
   }
+
+  @media (max-width: 768px) {
+    max-width: 150px;
+    max-height: 150px;
+  }
 `;
 
 const LottieWrapper = styled.div`
   width: 200px;
   height: 200px;
 
-  /* Ensure Lottie stays contained */
   svg {
     width: 100%;
     height: 100%;
+  }
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 150px;
   }
 `;
 
@@ -174,7 +243,7 @@ const ModalContent = styled.div`
   background: #fff;
   padding: 2rem;
   border-radius: 10px;
-  max-width: 700px; /* Increased width for better layout */
+  max-width: 700px;
   text-align: center;
   position: relative;
   display: flex;
@@ -202,16 +271,25 @@ const ModalContent = styled.div`
       text-decoration: underline;
     }
   }
+
+  @media (max-width: 768px) {
+    max-width: 90%;
+    padding: 1.5rem;
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
 `;
+
 const ModalContentWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2rem; /* Space between the Lottie and image */
+  gap: 2rem;
   margin-bottom: 1.5rem;
 
   @media (max-width: 768px) {
-    flex-direction: column; /* Stack on smaller screens */
+    flex-direction: column;
   }
 `;
 
@@ -226,7 +304,13 @@ const ModalImageWrapper = styled.div`
     height: auto;
     object-fit: cover;
   }
+
+  @media (max-width: 768px) {
+    max-width: 200px;
+    max-height: 200px;
+  }
 `;
+
 const CloseButton = styled.button`
   position: absolute;
   top: 10px;
@@ -246,9 +330,10 @@ export const SplashScreenWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #000000, #8C8EFF); // aground color of the splash screen
-  z-index: 9999; // Ensure it appears above everything
+  background: linear-gradient(135deg, #000000, #8C8EFF);
+  z-index: 9999;
 `;
+
 export const CertificatesSection = styled.section`
   padding: 3rem 2rem;
   background-color: #f8f9fa;
@@ -258,12 +343,23 @@ export const CertificatesSection = styled.section`
     font-size: 2rem;
     margin-bottom: 2rem;
   }
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
 `;
 
 export const CertificateList = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const CertificateCard = styled.div`
@@ -292,10 +388,16 @@ export const CertificateCard = styled.div`
     padding: 0 1rem 1rem;
     color: #666;
   }
+
+  @media (max-width: 768px) {
+    h3 {
+      font-size: 1rem;
+    }
+    p {
+      font-size: 0.9rem;
+    }
+  }
 `;
-
-
-
 
 export const fadeIn = keyframes`
   from {
@@ -305,6 +407,7 @@ export const fadeIn = keyframes`
     opacity: 1;
   }
 `;
+
 
 
 export {Container,

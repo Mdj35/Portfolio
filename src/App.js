@@ -68,9 +68,11 @@ const App = () => {
         <SplashScreenWrapper>
           <Lottie animationData={splashAnimation} loop={false} />
         </SplashScreenWrapper>
+        
       ) : (
+        
         <Container>
-          <Header>
+  <Header>
             <h1>My Portfolio</h1>
             <Nav>
               <a href="#about">About</a>
@@ -79,7 +81,6 @@ const App = () => {
               <a href="#contact">Contact</a>
             </Nav>
           </Header>
-  
           <HeroSection>
             <motion.div
               initial={{ x: '-100vw' }}
@@ -150,11 +151,6 @@ const App = () => {
             {projects.map((project) => (
               <motion.div
                 key={project.id}
-                whileHover={{ scale: 1.02 }}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
               >
                 <ProjectCard onClick={() => openModal(project)}>
                   <ContentWrapper>
@@ -170,9 +166,6 @@ const App = () => {
                     </ImageWrapper>
                   </ContentWrapper>
                   <motion.div
-                    initial={{ opacity: 0 }}
-                    whileHover={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
                   >
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
@@ -181,6 +174,29 @@ const App = () => {
               </motion.div>
             ))}
           </ProjectsSection>
+          {modalOpen && currentProject && (
+  <ModalBackdrop onClick={closeModal}>
+    <ModalContent onClick={(e) => e.stopPropagation()}>
+      <CloseButton onClick={closeModal}>×</CloseButton>
+      <h2>{currentProject.title}</h2>
+
+      {/* Flexbox Layout for Lottie and Image */}
+      <ModalContentWrapper>
+        <LottieContainer>
+          <Lottie animationData={currentProject.animation} loop={true} />
+        </LottieContainer>
+        <ModalImageWrapper>
+          <img src={currentProject.image} alt={currentProject.title} />
+        </ModalImageWrapper>
+      </ModalContentWrapper>
+
+      <p>{currentProject.description}</p>
+      <a href={currentProject.link} target="_blank" rel="noopener noreferrer">
+        View Project
+      </a>
+    </ModalContent>
+  </ModalBackdrop>
+)}
   
           {/* Certificates Section */}
           <CertificatesSection id="certificates">
