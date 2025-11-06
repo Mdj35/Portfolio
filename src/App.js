@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import projects from './Component/Projects';
-import { FaFacebook, FaInstagram, FaEnvelope, FaPhone } from 'react-icons/fa'; // Font Awesome Icons
+import { FaFacebook, FaInstagram, FaEnvelope, FaPhone,FaBars,FaTimes } from 'react-icons/fa'; // Font Awesome Icons
 import { motion, useScroll, useTransform } from 'framer-motion'; // Import framer-motion
 import certificates from './Component/Certificates'; 
 import splashAnimation from './splash.json'; // Replace with your splash screen animation
@@ -23,6 +23,7 @@ const App = () => {
 
   const [showSplash, setShowSplash] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   // added: scroll-driven values for header animation
   const { scrollY } = useScroll(); // framer-motion hook already imported
@@ -57,38 +58,123 @@ const App = () => {
   return (
     <>
       {/* fixed, scroll-animated header (moved outside Container) */}
-      <motion.header
-        style={{
-          position: 'fixed',
-          left: 0,
-          right: 0,
-          top: 0,
-          height: 64,
-          zIndex: 9999,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1rem',
-          padding: '0 1.5rem',
-          // framer-motion values created above
-          y: headerY,
-          background: headerBg,
-          boxShadow: headerShadow,
-          padding: headerPadding,
-        }}
-        aria-label="Main header"
-      >
-        {/* use a plain color switch driven by isScrolled so text is always visible */}
-        <h1 style={{ margin: 0, fontSize: '1.25rem', color: isScrolled ? '#111' : '#fff' }}>
-          My Portfolio
-        </h1>
-        <nav style={{ display: 'flex', gap: '1rem' }}>
-          <a style={{ color: isScrolled ? '#111' : '#fff', textDecoration: 'none' }} href="#about">About</a>
-          <a style={{ color: isScrolled ? '#111' : '#fff', textDecoration: 'none' }} href="#projects">Projects</a>
-          <a style={{ color: isScrolled ? '#111' : '#fff', textDecoration: 'none' }} href="#certificates">Certificates</a>
-          <a style={{ color: isScrolled ? '#111' : '#fff', textDecoration: 'none' }} href="#contact">Contact</a>
-        </nav>
-      </motion.header>
+     <motion.header
+  style={{
+    position: "fixed",
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 64,
+    zIndex: 9999,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "1rem",
+    padding: "0 1.5rem",
+    y: headerY,
+    background: headerBg,
+    boxShadow: headerShadow,
+    padding: headerPadding,
+  }}
+  aria-label="Main header"
+>
+  {/* === Logo / Brand === */}
+  <h1
+    style={{
+      margin: 0,
+      fontSize: "1.25rem",
+      color: isScrolled ? "#111" : "#fff",
+      zIndex: 1001,
+    }}
+  >
+    My Portfolio
+  </h1>
+
+  {/* === Desktop Navigation === */}
+  <nav
+    className="desktop-nav"
+    style={{
+      display: "flex",
+      gap: "1rem",
+    }}
+  >
+    <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#about">
+      About
+    </a>
+    <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#projects">
+      Projects
+    </a>
+    <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#certificates">
+      Certificates
+    </a>
+    <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#contact">
+      Contact
+    </a>
+  </nav>
+
+  {/* === Mobile Menu Toggle === */}
+  <div
+    className="mobile-menu-icon"
+    style={{
+      display: "none",
+      cursor: "pointer",
+      zIndex: 1001,
+    }}
+    onClick={() => setMenuOpen((prev) => !prev)}
+  >
+    {menuOpen ? (
+      <FaTimes size={22} color={isScrolled ? "#111" : "#fff"} />
+    ) : (
+      <FaBars size={22} color={isScrolled ? "#111" : "#fff"} />
+    )}
+  </div>
+
+  {/* === Mobile Menu Dropdown === */}
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
+    transition={{ duration: 0.3 }}
+    style={{
+      position: "absolute",
+      top: "64px",
+      left: 0,
+      right: 0,
+      background: isScrolled ? "rgba(255,255,255,0.95)" : "rgba(0,0,0,0.95)",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      gap: "1.2rem",
+      padding: "1.5rem 0",
+      pointerEvents: menuOpen ? "auto" : "none",
+      zIndex: 1000,
+    }}
+  >
+    <a onClick={() => setMenuOpen(false)} href="#about" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
+      About
+    </a>
+    <a onClick={() => setMenuOpen(false)} href="#projects" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
+      Projects
+    </a>
+    <a onClick={() => setMenuOpen(false)} href="#certificates" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
+      Certificates
+    </a>
+    <a onClick={() => setMenuOpen(false)} href="#contact" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
+      Contact
+    </a>
+  </motion.div>
+
+  {/* === Mobile Responsive Styling === */}
+  <style>{`
+    @media (max-width: 768px) {
+      .desktop-nav {
+        display: none;
+      }
+      .mobile-menu-icon {
+        display: block;
+      }
+    }
+  `}</style>
+</motion.header>
       {showSplash ? (
         <SplashScreenWrapper>
           <Lottie animationData={splashAnimation} loop={false} />
