@@ -1,0 +1,258 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import profileImage from '../prof.jpg';
+import bg1 from '../bg1.jpg';
+import bg2 from '../bg2.jpg';
+import bg3 from '../bg3.jpg';
+
+const AboutSection = () => {
+  const [scrollY, setScrollY] = useState(0);
+  const backgrounds = [bg1, bg2, bg3];
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Determine which background to show based on scroll
+  const backgroundIndex = Math.floor((scrollY / window.innerHeight) % backgrounds.length);
+
+  const skills = ['React', 'JavaScript (ES6+)', 'HTML & CSS', 'Framer Motion', 'Three.js', 'Accessibility'];
+  const stats = [
+    { label: 'Projects', value: 12 },
+    { label: 'Certificates', value: 8 },
+    { label: 'Years', value: 2 },
+  ];
+
+  return (
+    <section
+      id="about"
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        overflow: 'hidden',
+        boxSizing: 'border-box',
+      }}
+    >
+      {/* Fonts */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap');
+        #about { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
+        #about h2, #about h4 { font-family: 'Merriweather', Georgia, serif; }
+      `}</style>
+
+      {/* Backgrounds (no scroll movement, only smooth cross-fade) */}
+      {backgrounds.map((bg, i) => (
+        <motion.div
+          key={i}
+          aria-hidden
+          animate={{ opacity: i === backgroundIndex ? 1 : 0 }}
+          transition={{ duration: 1.2, ease: 'easeInOut' }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            backgroundImage: `url(${bg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            zIndex: 0,
+            pointerEvents: 'none',
+          }}
+        />
+      ))}
+
+      {/* Overlay for readability */}
+      <div
+        aria-hidden
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.5) 100%)',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Content */}
+      <div style={{ position: 'relative', zIndex: 5, padding: '15rem 2rem' }}>
+        <motion.div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'space-between',
+            gap: '2rem',
+            maxWidth: 1200,
+            margin: '0 auto',
+            flexWrap: 'wrap',
+            color: 'white',
+          }}
+        >
+          {/* Profile */}
+          <motion.div
+            style={{
+              flex: '0 0 320px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.img
+              src={profileImage}
+              alt="Vynce Ian Oani"
+              style={{
+                width: 300,
+                height: 300,
+                borderRadius: 16,
+                objectFit: 'cover',
+                border: '4px solid rgba(255,255,255,0.92)',
+                boxShadow: '0 14px 40px rgba(0,0,0,0.45)',
+              }}
+              initial={{ scale: 0.95, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8 }}
+            />
+          </motion.div>
+
+          {/* Details */}
+          <motion.div
+            style={{ flex: '1 1 520px', minWidth: 320 }}
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+          >
+            <motion.h2
+              style={{ fontSize: 32, margin: 0, fontWeight: 700 }}
+              initial={{ y: 12, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              Vynce Ian Oani
+            </motion.h2>
+
+            <motion.h4
+              style={{ marginTop: 10, marginBottom: 16, fontWeight: 500, opacity: 0.95 }}
+              initial={{ y: 8, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 0.95 }}
+              transition={{ duration: 0.6, delay: 0.08 }}
+            >
+              Frontend Developer · UI / UX Enthusiast
+            </motion.h4>
+
+            <motion.p
+              style={{ fontSize: 16, lineHeight: 1.6, marginBottom: 18, opacity: 0.95 }}
+              initial={{ y: 12, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.18 }}
+            >
+              I build interactive, accessible, and visually engaging web experiences using modern tools.
+              I focus on clean code, performance, and intuitive interfaces — always learning and iterating.
+            </motion.p>
+
+            {/* Links */}
+            <motion.div
+              style={{ display: 'flex', gap: 12, marginBottom: 18 }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.32 }}
+            >
+              <a
+                href="https://github.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'white', display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+              >
+                <FaGithub /> GitHub
+              </a>
+              <a
+                href="https://www.linkedin.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ color: 'white', display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+              >
+                <FaLinkedin /> LinkedIn
+              </a>
+            </motion.div>
+
+            {/* Skills */}
+            <motion.div
+              style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
+              {skills.map((s) => (
+                <span
+                  key={s}
+                  style={{
+                    background: 'rgba(255,255,255,0.08)',
+                    padding: '8px 12px',
+                    borderRadius: 10,
+                    fontSize: 14,
+                    color: 'white',
+                    border: '1px solid rgba(255,255,255,0.06)',
+                  }}
+                >
+                  {s}
+                </span>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Stats */}
+          <motion.aside
+            style={{
+              flex: '0 0 220px',
+              minWidth: 200,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 14,
+              alignItems: 'stretch',
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.12 }}
+          >
+            {stats.map((s) => (
+              <div
+                key={s.label}
+                style={{
+                  background: 'rgba(255,255,255,0.05)',
+                  padding: '12px 14px',
+                  borderRadius: 12,
+                  textAlign: 'center',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                }}
+              >
+                <div style={{ fontSize: 18, fontWeight: 700 }}>{s.value}+</div>
+                <div style={{ fontSize: 13, opacity: 0.9 }}>{s.label}</div>
+              </div>
+            ))}
+
+            <a
+              href="#contact"
+              style={{
+                marginTop: 6,
+                padding: '10px 12px',
+                borderRadius: 12,
+                background: 'rgba(255,255,255,0.12)',
+                textAlign: 'center',
+                color: 'white',
+                textDecoration: 'none',
+                fontWeight: 600,
+                border: '1px solid rgba(255,255,255,0.08)',
+              }}
+            >
+              Work With Me
+            </a>
+          </motion.aside>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
+
+export default AboutSection;
