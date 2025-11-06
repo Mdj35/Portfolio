@@ -43,16 +43,17 @@ const AboutSection = () => {
       <style>{`
         @media (max-width: 768px) {
           #about {
-            padding-top: 64px; /* Account for fixed header */
+            padding-top: 80px; /* Increased padding for header */
+            min-height: auto;
           }
           
           #about > div {
-            padding: 4rem 1rem !important;
+            padding: 2rem 1rem !important;
           }
 
           #about .profile-image {
-            width: 200px !important;
-            height: 200px !important;
+            width: 180px !important;
+            height: 180px !important;
             margin: 0 auto 2rem !important;
           }
 
@@ -60,11 +61,14 @@ const AboutSection = () => {
             flex-direction: column;
             align-items: center;
             text-align: center;
+            padding: 0 1rem;
+            gap: 1.5rem;
           }
 
           #about .details {
-            min-width: 100% !important;
-            padding: 0 1rem;
+            width: 100% !important;
+            min-width: unset !important;
+            padding: 0;
           }
 
           #about .stats-aside {
@@ -72,41 +76,94 @@ const AboutSection = () => {
             flex-direction: row !important;
             flex-wrap: wrap;
             justify-content: center;
-            margin-top: 2rem;
+            gap: 1rem;
+            margin-top: 1.5rem;
           }
 
           #about .stat-card {
-            flex: 1 1 140px;
-            max-width: 160px;
+            flex: 1 1 120px;
+            max-width: 140px;
+            min-width: unset;
           }
 
           #about .skills-wrapper {
             justify-content: center;
+            gap: 0.5rem;
+          }
+
+          #about .skills-wrapper span {
+            font-size: 12px !important;
+            padding: 6px 10px !important;
           }
         }
 
-        @media (max-width: 480px) {
+        /* Additional breakpoint for smaller phones */
+        @media (max-width: 380px) {
+          #about {
+            padding-top: 70px;
+          }
+
+          #about .profile-image {
+            width: 150px !important;
+            height: 150px !important;
+          }
+
           #about h2 {
-            font-size: 24px !important;
+            font-size: 22px !important;
           }
 
           #about h4 {
-            font-size: 16px !important;
+            font-size: 14px !important;
           }
 
           #about p {
-            font-size: 14px !important;
+            font-size: 13px !important;
+            line-height: 1.5 !important;
           }
 
           #about .stat-card {
             flex: 1 1 100%;
             max-width: 100%;
+            margin: 0.25rem 0;
+          }
+
+          #about .skills-wrapper {
+            gap: 0.35rem;
+          }
+
+          #about .skills-wrapper span {
+            font-size: 11px !important;
+            padding: 5px 8px !important;
+          }
+        }
+
+        /* Fix for extra small devices */
+        @media (max-width: 320px) {
+          #about > div {
+            padding: 1rem 0.5rem !important;
+          }
+
+          #about .content-wrapper {
+            padding: 0 0.5rem;
+          }
+
+          #about .profile-image {
+            width: 130px !important;
+            height: 130px !important;
           }
         }
       `}</style>
 
-      {/* Content */}
-      <div style={{ position: 'relative', zIndex: 5, padding: '15rem 2rem' }}>
+      {/* Content wrapper adjustment */}
+      <div style={{ 
+        position: 'relative', 
+        zIndex: 5, 
+        padding: '15rem 2rem',
+        width: '100%',
+        maxWidth: '100vw',
+        margin: '0 auto',
+        boxSizing: 'border-box'
+      }}>
         <motion.div
           className="content-wrapper"
           style={{
