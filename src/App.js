@@ -116,9 +116,11 @@ const App = () => {
   <div
     className="mobile-menu-icon"
     style={{
-      display: "none",
+      display: "none", // This will be overridden by media query
       cursor: "pointer",
       zIndex: 1001,
+      padding: "0.5rem",
+      marginLeft: "auto", // Push to right side
     }}
     onClick={() => setMenuOpen((prev) => !prev)}
   >
@@ -165,12 +167,18 @@ const App = () => {
 
   {/* === Mobile Responsive Styling === */}
   <style>{`
-    @media (max-width: 768px) {
+    @media screen and (max-width: 768px) {
       .desktop-nav {
-        display: none;
+        display: none !important;
       }
       .mobile-menu-icon {
-        display: block;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+      /* Ensure header padding is consistent */
+      motion.header {
+        padding: 0 1rem !important;
       }
     }
   `}</style>
