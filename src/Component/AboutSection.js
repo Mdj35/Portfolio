@@ -4,8 +4,23 @@ import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import profileImage from '../prof.jpg';
 
 const AboutSection = () => {
-  // Remove background related code
-  const skills = ['React', 'JavaScript (ES6+)', 'HTML & CSS', 'Framer Motion', 'Three.js', 'Accessibility'];
+  const skills = [
+    // Frontend
+    'React', 
+    'JavaScript (ES6+)', 
+    'HTML & CSS',
+    'Framer Motion',
+    // Backend
+    'Node.js',
+    'Express',
+    'MongoDB',
+    'SQL',
+    // Tools & Others
+    'Git',
+    'RESTful APIs',
+    'Docker',
+    'AWS'
+  ];
   const stats = [
     { label: 'Projects', value: 12 },
     { label: 'Certificates', value: 8 },
@@ -24,9 +39,76 @@ const AboutSection = () => {
         color: 'white',
       }}
     >
+      {/* Mobile Responsive Styles */}
+      <style>{`
+        @media (max-width: 768px) {
+          #about {
+            padding-top: 64px; /* Account for fixed header */
+          }
+          
+          #about > div {
+            padding: 4rem 1rem !important;
+          }
+
+          #about .profile-image {
+            width: 200px !important;
+            height: 200px !important;
+            margin: 0 auto 2rem !important;
+          }
+
+          #about .content-wrapper {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+          }
+
+          #about .details {
+            min-width: 100% !important;
+            padding: 0 1rem;
+          }
+
+          #about .stats-aside {
+            width: 100%;
+            flex-direction: row !important;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 2rem;
+          }
+
+          #about .stat-card {
+            flex: 1 1 140px;
+            max-width: 160px;
+          }
+
+          #about .skills-wrapper {
+            justify-content: center;
+          }
+        }
+
+        @media (max-width: 480px) {
+          #about h2 {
+            font-size: 24px !important;
+          }
+
+          #about h4 {
+            font-size: 16px !important;
+          }
+
+          #about p {
+            font-size: 14px !important;
+          }
+
+          #about .stat-card {
+            flex: 1 1 100%;
+            max-width: 100%;
+          }
+        }
+      `}</style>
+
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 5, padding: '15rem 2rem' }}>
         <motion.div
+          className="content-wrapper"
           style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -40,6 +122,7 @@ const AboutSection = () => {
         >
           {/* Profile Image */}
           <motion.img
+            className="profile-image"
             src={profileImage}
             alt="Vynce Ian Oani"
             style={{
@@ -57,6 +140,7 @@ const AboutSection = () => {
 
           {/* Details */}
           <motion.div
+            className="details"
             style={{ flex: '1 1 520px', minWidth: 320 }}
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -77,7 +161,7 @@ const AboutSection = () => {
               whileInView={{ y: 0, opacity: 0.95 }}
               transition={{ duration: 0.6, delay: 0.08 }}
             >
-              Frontend Developer · UI / UX Enthusiast
+              Full-Stack Developer · Software Engineer
             </motion.h4>
 
             <motion.p
@@ -86,8 +170,8 @@ const AboutSection = () => {
               whileInView={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.18 }}
             >
-              I build interactive, accessible, and visually engaging web experiences using modern tools.
-              I focus on clean code, performance, and intuitive interfaces — always learning and iterating.
+              I build complete web applications from front to back, combining modern UI/UX with robust server-side solutions. 
+              Focused on scalable architecture, clean code, and optimal performance across the entire stack.
             </motion.p>
 
             {/* Links */}
@@ -98,7 +182,7 @@ const AboutSection = () => {
               transition={{ duration: 0.6, delay: 0.32 }}
             >
               <a
-                href="https://github.com/"
+                href="https://github.com/Mdj35"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: 'white', display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
@@ -106,7 +190,7 @@ const AboutSection = () => {
                 <FaGithub /> GitHub
               </a>
               <a
-                href="https://www.linkedin.com/"
+                href="https://www.linkedin.com/in/vynce-ian-oani-832080323/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: 'white', display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
@@ -117,6 +201,7 @@ const AboutSection = () => {
 
             {/* Skills */}
             <motion.div
+              className="skills-wrapper"
               style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -142,6 +227,7 @@ const AboutSection = () => {
 
           {/* Stats */}
           <motion.aside
+            className="stats-aside"
             style={{
               flex: '0 0 220px',
               minWidth: 200,
@@ -157,6 +243,7 @@ const AboutSection = () => {
             {stats.map((s) => (
               <div
                 key={s.label}
+                className="stat-card"
                 style={{
                   background: 'rgba(226, 232, 240, 0.05)',
                   padding: '12px 14px',
@@ -186,7 +273,8 @@ const AboutSection = () => {
               href="#contact"
               style={{
                 marginTop: 6,
-                padding: '10px 12px',
+                padding: '12px 16px',
+                width: '100%',
                 borderRadius: 12,
                 background: 'rgba(139, 182, 240, 0.15)',
                 textAlign: 'center',
