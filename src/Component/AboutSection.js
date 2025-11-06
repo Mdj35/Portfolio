@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import profileImage from '../prof.jpg';
+import projects from './Projects'; // Add this import
+import certificates from './Certificates'; // Add this import
 
 const AboutSection = () => {
   const skills = [
@@ -21,9 +23,10 @@ const AboutSection = () => {
     'Docker',
     'AWS'
   ];
+  
   const stats = [
-    { label: 'Projects', value: 12 },
-    { label: 'Certificates', value: 8 },
+    { label: 'Projects', value: projects.length }, // Dynamic project count
+    { label: 'Certificates', value: certificates.length }, // Dynamic certificate count
     { label: 'Years', value: 2 },
   ];
 

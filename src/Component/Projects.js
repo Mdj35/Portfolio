@@ -2,6 +2,8 @@ import projectAnimation from './Animation - 1737107473256.json';
 import sample from './sample.jpg'// Replace with your project's Lottie animation file
 import sk from './skl.png' 
 import church from './1.png'// Replace with your project's Lottie animation file
+import alampat from './alampat.png'
+import { image } from 'framer-motion/client';
 
 
 const projects = [
@@ -30,6 +32,14 @@ const projects = [
       animation: projectAnimation,
       
 
+    },
+    {
+      id: 4,
+      title: 'Alampat',
+      description: 'This is another amazing project.',
+      image: alampat, // Replace with your project image path
+      link: 'https://alampat.vercel.app/', // Replace with your project link
+      animation: projectAnimation,
     }
   ];
 
