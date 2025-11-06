@@ -2,23 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import profileImage from '../prof.jpg';
-import bg1 from '../bg1.jpg';
-import bg2 from '../bg2.jpg';
-import bg3 from '../bg3.jpg';
 
 const AboutSection = () => {
-  const [scrollY, setScrollY] = useState(0);
-  const backgrounds = [bg1, bg2, bg3];
-
-  useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Determine which background to show based on scroll
-  const backgroundIndex = Math.floor((scrollY / window.innerHeight) % backgrounds.length);
-
+  // Remove background related code
   const skills = ['React', 'JavaScript (ES6+)', 'HTML & CSS', 'Framer Motion', 'Three.js', 'Accessibility'];
   const stats = [
     { label: 'Projects', value: 12 },
@@ -34,47 +20,10 @@ const AboutSection = () => {
         minHeight: '100vh',
         overflow: 'hidden',
         boxSizing: 'border-box',
+        background: 'linear-gradient(135deg, #1a1f3c 0%, #162447 100%)',
+        color: 'white',
       }}
     >
-      {/* Fonts */}
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:wght@400;700&display=swap');
-        #about { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
-        #about h2, #about h4 { font-family: 'Merriweather', Georgia, serif; }
-      `}</style>
-
-      {/* Backgrounds (no scroll movement, only smooth cross-fade) */}
-      {backgrounds.map((bg, i) => (
-        <motion.div
-          key={i}
-          aria-hidden
-          animate={{ opacity: i === backgroundIndex ? 1 : 0 }}
-          transition={{ duration: 1.2, ease: 'easeInOut' }}
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `url(${bg})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            zIndex: 0,
-            pointerEvents: 'none',
-          }}
-        />
-      ))}
-
-      {/* Overlay for readability */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background:
-            'linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.55) 50%, rgba(0,0,0,0.5) 100%)',
-          zIndex: 1,
-        }}
-      />
-
       {/* Content */}
       <div style={{ position: 'relative', zIndex: 5, padding: '15rem 2rem' }}>
         <motion.div
@@ -86,36 +35,25 @@ const AboutSection = () => {
             maxWidth: 1200,
             margin: '0 auto',
             flexWrap: 'wrap',
-            color: 'white',
+            color: '#e2e8f0',
           }}
         >
-          {/* Profile */}
-          <motion.div
+          {/* Profile Image */}
+          <motion.img
+            src={profileImage}
+            alt="Vynce Ian Oani"
             style={{
-              flex: '0 0 320px',
-              display: 'flex',
-              justifyContent: 'center',
+              width: 300,
+              height: 300,
+              borderRadius: 16,
+              objectFit: 'cover',
+              border: '4px solid rgba(226, 232, 240, 0.92)',
+              boxShadow: '0 14px 40px rgba(0,0,0,0.3)',
             }}
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ scale: 0.95, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.8 }}
-          >
-            <motion.img
-              src={profileImage}
-              alt="Vynce Ian Oani"
-              style={{
-                width: 300,
-                height: 300,
-                borderRadius: 16,
-                objectFit: 'cover',
-                border: '4px solid rgba(255,255,255,0.92)',
-                boxShadow: '0 14px 40px rgba(0,0,0,0.45)',
-              }}
-              initial={{ scale: 0.95, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8 }}
-            />
-          </motion.div>
+          />
 
           {/* Details */}
           <motion.div
@@ -188,12 +126,12 @@ const AboutSection = () => {
                 <span
                   key={s}
                   style={{
-                    background: 'rgba(255,255,255,0.08)',
+                    background: 'rgba(226, 232, 240, 0.08)',
                     padding: '8px 12px',
                     borderRadius: 10,
                     fontSize: 14,
-                    color: 'white',
-                    border: '1px solid rgba(255,255,255,0.06)',
+                    color: '#8bb6f0',
+                    border: '1px solid rgba(139, 182, 240, 0.2)',
                   }}
                 >
                   {s}
@@ -220,30 +158,51 @@ const AboutSection = () => {
               <div
                 key={s.label}
                 style={{
-                  background: 'rgba(255,255,255,0.05)',
+                  background: 'rgba(226, 232, 240, 0.05)',
                   padding: '12px 14px',
                   borderRadius: 12,
                   textAlign: 'center',
-                  border: '1px solid rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(139, 182, 240, 0.15)',
                 }}
               >
-                <div style={{ fontSize: 18, fontWeight: 700 }}>{s.value}+</div>
-                <div style={{ fontSize: 13, opacity: 0.9 }}>{s.label}</div>
+                <div style={{ 
+                  fontSize: 18, 
+                  fontWeight: 700,
+                  color: '#8bb6f0'
+                }}>
+                  {s.value}+
+                </div>
+                <div style={{ 
+                  fontSize: 13, 
+                  color: '#a8c5f7'
+                }}>
+                  {s.label}
+                </div>
               </div>
             ))}
 
+            {/* Work With Me Button */}
             <a
               href="#contact"
               style={{
                 marginTop: 6,
                 padding: '10px 12px',
                 borderRadius: 12,
-                background: 'rgba(255,255,255,0.12)',
+                background: 'rgba(139, 182, 240, 0.15)',
                 textAlign: 'center',
-                color: 'white',
+                color: '#8bb6f0',
                 textDecoration: 'none',
                 fontWeight: 600,
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '1px solid rgba(139, 182, 240, 0.2)',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(139, 182, 240, 0.25)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(139, 182, 240, 0.15)';
+                e.target.style.transform = 'translateY(0)';
               }}
             >
               Work With Me
