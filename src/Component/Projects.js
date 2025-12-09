@@ -4,6 +4,7 @@ import sk from './skl.png'
 import church from './1.png'// Replace with your project's Lottie animation file
 import alampat from './alampat.png'
 import { image } from 'framer-motion/client';
+import hcdc from "./hcdc.jpg";
 
 
 const projects = [
@@ -40,6 +41,14 @@ const projects = [
       image: alampat, // Replace with your project image path
       link: 'https://alampat.vercel.app/', // Replace with your project link
       animation: projectAnimation,
+    },
+    {
+      id: 5,
+      title: 'HCDC Website',
+      description:'',
+      image: hcdc,
+      link:'https://www.hcdc.edu.ph/',
+      animation:projectAnimation,
     }
   ];
 
