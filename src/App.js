@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import projects from './Component/Projects';
-import { FaFacebook, FaInstagram, FaEnvelope, FaPhone,FaBars,FaTimes } from 'react-icons/fa'; // Font Awesome Icons
+import { FaFacebook, FaInstagram, FaEnvelope, FaPhone, FaBars, FaTimes, FaDownload } from 'react-icons/fa'; // Font Awesome Icons
 import { motion, useScroll, useTransform } from 'framer-motion'; // Import framer-motion
 import certificates from './Component/Certificates'; 
 import splashAnimation from './splash.json'; // Replace with your splash screen animation
@@ -54,6 +54,30 @@ const App = () => {
     }, 3000);
     return () => clearTimeout(timer); // Cleanup timer on unmount
   }, []);
+
+  const downloadPortfolio = async () => {
+    try {
+      const res = await fetch('/Oani-portfolio.pdf');
+      if (!res.ok) {
+        // File missing — show actionable message instead of opening an HTML 404
+        alert('Portfolio PDF not found. Please add `Oani-portfolio.pdf` to the `public/` folder or provide a hosted URL.');
+        return;
+      }
+      const blob = await res.blob();
+      const filename = 'Oani-portfolio.pdf';
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error('Download failed', err);
+      alert('Unable to download portfolio. Please check your network connection or upload `Oani-portfolio.pdf` to the `public/` folder.');
+    }
+  };
 
   return (
     <>
@@ -328,23 +352,41 @@ const App = () => {
               >
                 Certificates
               </motion.h2>
-              <CertificateList>
+              <CertificateList
+                as={motion.div}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, amount: 0.2 }}
+                variants={{
+                  hidden: {},
+                  visible: { transition: { staggerChildren: 0.12 } },
+                }}
+              >
                 {certificates.map((certificate, index) => (
                   <CertificateCard
                     as={motion.div}
                     key={index}
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: index * 0.2 }}
+                    variants={{
+                      hidden: { opacity: 0, y: 40, scale: 0.98 },
+                      visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: 'easeOut' } },
+                    }}
+                    whileHover={{ y: -8, scale: 1.03, boxShadow: '0 14px 40px rgba(0,0,0,0.18)' }}
+                    whileTap={{ scale: 0.995 }}
+                    style={{ borderRadius: '12px', overflow: 'hidden', minHeight: '260px', display: 'flex', flexDirection: 'column' }}
                   >
-                    <img
+                    <motion.img
                       src={certificate.image}
                       alt={certificate.title}
                       draggable="false"
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.06, rotate: 1 }}
+                      transition={{ duration: 0.45 }}
+                      style={{ width: '100%', height: '200px', objectFit: 'cover', borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
                     />
-                    <h3>{certificate.title}</h3>
-                    <p>{certificate.description}</p>
+                    <div style={{ padding: '0.9rem' }}>
+                      <h3 style={{ margin: '0.25rem 0 0.5rem' }}>{certificate.title}</h3>
+                      <p style={{ margin: 0 }}>{certificate.description}</p>
+                    </div>
                   </CertificateCard>
                 ))}
               </CertificateList>
@@ -354,7 +396,7 @@ const App = () => {
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false, amount: 0.2 }}
                 transition={{ duration: 1 }}
               >
                 <h2>Contact Me</h2>
@@ -366,37 +408,137 @@ const App = () => {
                     gap: '1rem',
                   }}
                 >
-                  <a
+                  <motion.a
                     href="https://www.facebook.com/vynceian.oani.1"
                     target="_blank"
                     rel="noopener noreferrer"
+                    whileHover={{ scale: 1.15, rotate: 8, y: -6, boxShadow: '0 12px 30px rgba(66,103,178,0.16)' }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 360, damping: 18 }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, rgba(66,103,178,0.12), rgba(66,103,178,0.04))',
+                    }}
                   >
-                    <FaFacebook size={30} color="#4267B2" />
-                  </a>
-                  <a
-                    href="mailto:vynceian.oani@hcdc.edu.ph"
+                    <FaFacebook size={18} color="#4267B2" />
+                  </motion.a>
+
+                  <motion.a
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=vynceian.oani@hcdc.edu.ph"
                     target="_blank"
                     rel="noopener noreferrer"
+                    whileHover={{ scale: 1.12, rotate: -10, y: -4, boxShadow: '0 12px 30px rgba(212,70,56,0.14)' }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 340, damping: 18 }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, rgba(212,70,56,0.10), rgba(212,70,56,0.04))',
+                    }}
                   >
-                    <FaEnvelope size={30} color="#D44638" />
-                  </a>
-                  <a
-                    href="https://www.instagram.com/vynceian24"
+                    <FaEnvelope size={18} color="#D44638" />
+                  </motion.a>
+
+                  <motion.a
+                    href="https://www.instagram.com/vynceian35"
                     target="_blank"
                     rel="noopener noreferrer"
+                    whileHover={{ scale: 1.18, y: -6, boxShadow: '0 12px 30px rgba(225,48,108,0.14)' }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 350, damping: 18 }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, rgba(225,48,108,0.10), rgba(225,48,108,0.04))',
+                    }}
                   >
-                    <FaInstagram size={30} color="#E1306C" />
-                  </a>
-                  <a href="tel:+1234567890">
-                    <FaPhone size={30} color="#34A853" />
-                  </a>
+                    <FaInstagram size={18} color="#E1306C" />
+                  </motion.a>
+
+                  <motion.div
+                    style={{ position: 'relative', display: 'inline-block' }}
+                    whileHover={{}}
+                  >
+                    <motion.button
+                      onClick={downloadPortfolio}
+                      title="Download Portfolio (PDF)"
+                      style={{
+                        background: 'linear-gradient(135deg,#6c63ff,#9a8bff)',
+                        border: 'none',
+                        padding: 8,
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                      whileHover={{ scale: 1.2, rotate: [0, 8, -6, 0] }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.6, type: 'spring', stiffness: 320, damping: 22 }}
+                      aria-label="Download Portfolio"
+                    >
+                      <FaDownload size={18} color="#fff" />
+                    </motion.button>
+
+                    <motion.span
+                      initial={{ opacity: 0, y: 6 }}
+                      whileHover={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.18 }}
+                      style={{
+                        position: 'absolute',
+                        bottom: 'calc(100% + 8px)',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        padding: '6px 8px',
+                        borderRadius: 6,
+                        background: 'rgba(0,0,0,0.8)',
+                        color: '#fff',
+                        fontSize: '0.72rem',
+                        pointerEvents: 'none',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      Download PDF
+                    </motion.span>
+                  </motion.div>
+
+                  <motion.a
+                    href="tel:09943189625"
+                    whileHover={{ scale: 1.12, y: -4, boxShadow: '0 12px 30px rgba(52,168,83,0.10)' }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: 'spring', stiffness: 340, damping: 18 }}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 44,
+                      height: 44,
+                      borderRadius: '50%',
+                      background: 'linear-gradient(135deg, rgba(52,168,83,0.08), rgba(52,168,83,0.03))',
+                    }}
+                  >
+                    <FaPhone size={18} color="#34A853" />
+                  </motion.a>
                 </div>
-                <p style={{ marginTop: '1rem' }}>Phone: +123 456 7890</p>
+                <p style={{ marginTop: '1rem' }}>Phone: 09943189625</p>
               </motion.div>
             </ContactSection>
   
             <Footer>
-              <p>© 2025 My Portfolio</p>
+              <p>© 2026 My Portfolio</p>
             </Footer>
           </Container>
         </>

@@ -21,7 +21,7 @@ const projects = [
       title: 'SKonnect',
       description: 'This is another amazing project.',
       image: sk, // Replace with your project image path
-      link: sk, // Replace with your project link
+      link: 'https://drive.google.com/file/d/1n2NUQICAX0b7eG_kbCG-AMYWekw8uZW6/view?usp=sharing', // Replace with your project link
       animation: projectAnimation,
     },
   {
@@ -52,4 +52,4 @@ const projects = [
     }
   ];
 
-  export default projects;
+  export default projects; 
