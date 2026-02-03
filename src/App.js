@@ -94,7 +94,6 @@ const App = () => {
     alignItems: "center",
     justifyContent: "space-between",
     gap: "1rem",
-    padding: "0 1.5rem",
     y: headerY,
     background: headerBg,
     boxShadow: headerShadow,

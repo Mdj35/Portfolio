@@ -3,7 +3,6 @@ import sample from './sample.jpg'// Replace with your project's Lottie animation
 import sk from './skl.png' 
 import church from './1.png'// Replace with your project's Lottie animation file
 import alampat from './alampat.png'
-import { image } from 'framer-motion/client';
 import hcdc from "./hcdc.jpg";
 
 
