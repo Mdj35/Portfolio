@@ -234,29 +234,40 @@ const AboutSection = () => {
               Focused on scalable architecture, clean code, and optimal performance across the entire stack.
             </motion.p>
 
-            {/* Links */}
             <motion.div
               style={{ display: 'flex', gap: 12, marginBottom: 18 }}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.32 }}
             >
-              <a
+              <motion.a
                 href="https://github.com/Mdj35"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: 'white', display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+                whileHover={{
+                  scale: 1.15,
+                  color: '#ff4d6d',
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2 }}
               >
                 <FaGithub /> GitHub
-              </a>
-              <a
+              </motion.a>
+              <motion.a
                 href="https://www.linkedin.com/in/vynce-ian-oani-832080323/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: 'white', display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}
+                whileHover={{
+                  scale: 1.15,
+                  color: '#ff4d6d',
+                }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.2 }}
               >
                 <FaLinkedin /> LinkedIn
-              </a>
+              </motion.a>
             </motion.div>
 
             {/* Skills */}
@@ -268,20 +279,29 @@ const AboutSection = () => {
               transition={{ duration: 0.6, delay: 0.4 }}
             >
               {skills.map((s) => (
-                <span
-                  key={s}
-                  style={{
-                    background: 'rgba(226, 232, 240, 0.08)',
-                    padding: '8px 12px',
-                    borderRadius: 10,
-                    fontSize: 14,
-                    color: '#8bb6f0',
-                    border: '1px solid rgba(139, 182, 240, 0.2)',
-                  }}
-                >
-                  {s}
-                </span>
-              ))}
+              <motion.span
+                key={s}
+                style={{
+                  background: 'rgba(226, 232, 240, 0.08)',
+                  padding: '8px 12px',
+                  borderRadius: 10,
+                  fontSize: 14,
+                  color: '#8bb6f0',
+                  border: '1px solid rgba(139, 182, 240, 0.2)',
+                  display: 'inline-block',
+                }}
+                whileHover={{
+                  scale: 1.1,
+                  background: 'rgba(255, 77, 109, 0.15)',
+                  color: '#ff4d6d',
+                  borderColor: 'rgba(255, 77, 109, 0.4)',
+                  boxShadow: '0 6px 15px rgba(255, 77, 109, 0.2)',
+                }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+              >
+                {s}
+              </motion.span>
+            ))}
             </motion.div>
           </motion.div>
 
@@ -301,7 +321,7 @@ const AboutSection = () => {
             transition={{ duration: 0.8, delay: 0.12 }}
           >
             {stats.map((s) => (
-              <div
+              <motion.div
                 key={s.label}
                 className="stat-card"
                 style={{
@@ -311,6 +331,13 @@ const AboutSection = () => {
                   textAlign: 'center',
                   border: '1px solid rgba(139, 182, 240, 0.15)',
                 }}
+                whileHover={{
+                  scale: 1.08,
+                  background: 'rgba(255, 77, 109, 0.15)',
+                  borderColor: 'rgba(255, 77, 109, 0.4)',
+                  boxShadow: '0 8px 20px rgba(255, 77, 109, 0.2)',
+                }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
               >
                 <div style={{ 
                   fontSize: 18, 
@@ -325,11 +352,11 @@ const AboutSection = () => {
                 }}>
                   {s.label}
                 </div>
-              </div>
+              </motion.div>
             ))}
 
             {/* Work With Me Button */}
-            <a
+            <motion.a
               href="#contact"
               style={{
                 marginTop: 6,
@@ -343,18 +370,20 @@ const AboutSection = () => {
                 fontWeight: 600,
                 border: '1px solid rgba(139, 182, 240, 0.2)',
                 transition: 'all 0.3s ease',
+                display: 'block',
               }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(139, 182, 240, 0.25)';
-                e.target.style.transform = 'translateY(-2px)';
+              whileHover={{
+                scale: 1.05,
+                background: 'rgba(255, 77, 109, 0.2)',
+                color: '#ff4d6d',
+                borderColor: 'rgba(255, 77, 109, 0.4)',
+                boxShadow: '0 8px 20px rgba(255, 77, 109, 0.25)',
               }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(139, 182, 240, 0.15)';
-                e.target.style.transform = 'translateY(0)';
-              }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ duration: 0.3 }}
             >
               Work With Me
-            </a>
+            </motion.a>
           </motion.aside>
         </motion.div>
       </div>
