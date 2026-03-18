@@ -4,7 +4,7 @@ import projects from './Component/Projects';
 import ProjectModal from './Component/ProjectModal';
 import { FaFacebook, FaInstagram, FaEnvelope, FaPhone, FaBars, FaTimes, FaDownload } from 'react-icons/fa';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import certificates from './Component/Certificates'; 
+import certificates from './Component/Certificates';
 import splashAnimation from './splash.json';
 import {
   Container,
@@ -85,7 +85,7 @@ const App = () => {
 
   // Reusable scroll animation settings
   const viewportSettings = { once: false, amount: 0.2 };
-  
+
   const sectionHeaderVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
@@ -101,10 +101,6 @@ const App = () => {
     visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, type: 'spring', stiffness: 100 } }
   };
 
-  const slideInRight = {
-    hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6, type: 'spring' } }
-  };
 
   const slideInLeft = {
     hidden: { opacity: 0, x: -50 },
@@ -145,15 +141,15 @@ const App = () => {
           style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}
         >
           {['About', 'Projects', 'Experience', 'Certificates', 'Contact'].map((item) => (
-            <a 
+            <a
               key={item}
               style={{
-                color: 'var(--text-primary)', 
+                color: 'var(--text-primary)',
                 textDecoration: 'none',
                 fontWeight: 600,
                 fontSize: '0.95rem',
                 transition: 'color 0.3s ease',
-              }} 
+              }}
               href={`#${item.toLowerCase()}`}
               onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-primary)'}
               onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
@@ -231,7 +227,7 @@ const App = () => {
                 style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
               >
                 <Lottie animationData={splashAnimation} loop={false} style={{ width: 300 }} />
-                <motion.h2 
+                <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5, duration: 0.8 }}
@@ -249,7 +245,7 @@ const App = () => {
                 transition={{ duration: 1.2, type: 'spring', bounce: 0.3 }}
                 style={{ textAlign: 'center' }}
               >
-                <motion.h1 
+                <motion.h1
                   className="text-gradient"
                   style={{ fontSize: '6rem', fontWeight: 900, margin: 0, letterSpacing: '12px', textTransform: 'uppercase' }}
                   animate={{ textShadow: ['0 0 0px rgba(108,99,255,0)', '0 0 60px rgba(108,99,255,0.7)', '0 0 0px rgba(108,99,255,0)'] }}
@@ -374,11 +370,11 @@ const App = () => {
                 variants={staggerContainer}
                 style={{ maxWidth: '900px', margin: '0 auto', position: 'relative' }}
               >
-                <motion.div 
+                <motion.div
                   initial={{ height: 0 }}
                   whileInView={{ height: '100%' }}
                   transition={{ duration: 1.5, ease: "easeInOut" }}
-                  style={{ position: 'absolute', left: '26px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary), transparent)', zIndex: 0 }} 
+                  style={{ position: 'absolute', left: '26px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary), transparent)', zIndex: 0 }}
                 />
 
                 {experiences.map((exp, index) => (
@@ -395,13 +391,13 @@ const App = () => {
                     }}
                     whileHover={{ scale: 1.02, x: 10, borderColor: 'var(--accent-secondary)' }}
                   >
-                    <motion.div 
+                    <motion.div
                       initial={{ scale: 0 }}
                       whileInView={{ scale: 1 }}
                       transition={{ delay: index * 0.2 + 0.3, type: "spring" }}
-                      style={{ position: 'absolute', left: '-50px', top: '32px', width: '16px', height: '16px', borderRadius: '50%', background: 'var(--bg-secondary)', border: '4px solid var(--accent-secondary)', zIndex: 2, boxShadow: '0 0 10px var(--accent-secondary-glow)' }} 
+                      style={{ position: 'absolute', left: '-50px', top: '32px', width: '16px', height: '16px', borderRadius: '50%', background: 'var(--bg-secondary)', border: '4px solid var(--accent-secondary)', zIndex: 2, boxShadow: '0 0 10px var(--accent-secondary-glow)' }}
                     />
-                    
+
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                       <div>
                         <h3 style={{ margin: 0, fontSize: '1.4rem', color: 'var(--text-primary)' }}>{exp.position}</h3>
@@ -419,11 +415,11 @@ const App = () => {
                         {exp.duration}
                       </span>
                     </div>
-                    
+
                     <p style={{ margin: '1rem 0', color: 'var(--text-primary)', lineHeight: '1.7', opacity: 0.9 }}>
                       {exp.description}
                     </p>
-                    
+
                     <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
                       {exp.skills.map((skill, idx) => (
                         <span
@@ -488,9 +484,9 @@ const App = () => {
               >
                 <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>Let's Work Together</h2>
                 <p>Feel free to reach out through any of the platforms below. I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.</p>
-                
-                <motion.div 
-                  className="social-grid" 
+
+                <motion.div
+                  className="social-grid"
                   style={{ marginTop: '3rem' }}
                   variants={staggerContainer}
                 >
@@ -547,8 +543,8 @@ const App = () => {
                     <FaDownload size={22} />
                   </motion.button>
                 </motion.div>
-                
-                <motion.div 
+
+                <motion.div
                   variants={popInVariants}
                   whileHover={{ scale: 1.05 }}
                   style={{ marginTop: '3rem', display: 'inline-block', padding: '1rem 2rem', borderRadius: '30px', background: 'var(--surface-glass)', border: '1px solid var(--surface-border)', cursor: 'default' }}
@@ -564,9 +560,9 @@ const App = () => {
             </Footer>
           </Container>
 
-          <ProjectModal 
-            project={selectedProject} 
-            isOpen={isModalOpen} 
+          <ProjectModal
+            project={selectedProject}
+            isOpen={isModalOpen}
             onClose={handleCloseModal}
           />
         </>
