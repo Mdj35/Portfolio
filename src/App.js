@@ -27,6 +27,7 @@ const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [projectFilter, setProjectFilter] = useState('All');
 
   // Scroll Progress Hooks
   const { scrollY, scrollYProgress } = useScroll();
@@ -302,6 +303,7 @@ const App = () => {
 
             <ProjectsSection id="projects">
               <motion.div className="bg-orb bg-orb-2" style={{ y: orb1Y, animation: 'float 10s ease-in-out infinite' }} />
+              
               <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -317,54 +319,93 @@ const App = () => {
                 </p>
               </motion.div>
 
+              <motion.div variants={sectionHeaderVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem', position: 'relative', zIndex: 2 }}>
+                {['All', 'Capstone', 'IM', 'Freelance', 'Other Projects'].map(filter => (
+                  <motion.button
+                    key={filter}
+                    onClick={() => setProjectFilter(filter)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{
+                      padding: '0.6rem 1.5rem',
+                      borderRadius: '30px',
+                      border: `1px solid ${projectFilter === filter ? 'rgba(0, 240, 255, 0.4)' : 'var(--surface-border)'}`,
+                      background: projectFilter === filter ? 'rgba(0, 240, 255, 0.1)' : 'var(--surface-glass)',
+                      color: projectFilter === filter ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: projectFilter === filter ? '0 0 15px rgba(0, 240, 255, 0.2)' : 'none',
+                      backdropFilter: 'blur(5px)'
+                    }}
+                  >
+                    {filter}
+                  </motion.button>
+                ))}
+              </motion.div>
+
               <motion.div
                 className="projects-grid"
                 initial="hidden"
                 whileInView="visible"
                 viewport={viewportSettings}
                 variants={staggerContainer}
-                style={{ position: 'relative', zIndex: 2 }}
+                style={{ 
+                  position: 'relative', 
+                  zIndex: 2, 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+                  gap: '2.5rem',
+                  alignItems: 'stretch'
+                }}
               >
-                {projects.map((project, index) => (
-                  <motion.div
-                    key={project.id}
-                    className="glass-panel"
-                    variants={popInVariants}
-                    whileHover={{
-                      y: -15,
-                      scale: 1.03,
-                      boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
-                      borderColor: 'rgba(108, 99, 255, 0.6)'
-                    }}
-                    onClick={() => handleProjectClick(project)}
-                    style={{
-                      cursor: 'pointer',
-                      overflow: 'hidden',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'border-color 0.3s ease',
-                    }}
-                  >
-                    <div style={{ overflow: 'hidden', height: '220px' }}>
-                      <motion.img
-                        src={project.image}
-                        alt={project.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        whileHover={{ scale: 1.15 }}
-                        transition={{ duration: 0.6 }}
-                      />
-                    </div>
-                    <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                      <span style={{ color: 'var(--accent-primary)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem' }}>
-                        {project.category || 'Development'}
-                      </span>
-                      <h3 style={{ fontSize: '1.4rem', margin: '0 0 1rem', color: 'var(--text-primary)' }}>{project.title}</h3>
-                      <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem' }}>
-                        View Details <span style={{ color: 'var(--accent-secondary)' }}>&rarr;</span>
+                <AnimatePresence mode="popLayout">
+                  {projects.filter(p => projectFilter === 'All' || p.category === projectFilter).map((project, index) => (
+                    <motion.div
+                      key={project.id}
+                      layout
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      transition={{ duration: 0.3 }}
+                      className="glass-panel"
+                      variants={popInVariants}
+                      whileHover={{
+                        y: -15,
+                        scale: 1.03,
+                        boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
+                        borderColor: 'rgba(108, 99, 255, 0.6)'
+                      }}
+                      onClick={() => handleProjectClick(project)}
+                      style={{
+                        cursor: 'pointer',
+                        overflow: 'hidden',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        transition: 'border-color 0.3s ease',
+                      }}
+                    >
+                      <div style={{ overflow: 'hidden', height: '220px' }}>
+                        <motion.img
+                          src={project.image}
+                          alt={project.title}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          whileHover={{ scale: 1.15 }}
+                          transition={{ duration: 0.6 }}
+                        />
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                      <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ color: 'var(--accent-primary)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem' }}>
+                          {project.category || 'Development'}
+                        </span>
+                        <h3 style={{ fontSize: '1.4rem', margin: '0 0 1rem', color: 'var(--text-primary)' }}>{project.title}</h3>
+                        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem' }}>
+                          View Details <span style={{ color: 'var(--accent-secondary)' }}>&rarr;</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
               </motion.div>
             </ProjectsSection>
 
