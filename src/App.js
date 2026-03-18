@@ -239,27 +239,54 @@ const App = () => {
             ) : (
               <motion.div
                 key="ign-aenex"
-                initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, y: -40, filter: 'blur(10px)' }}
-                transition={{ duration: 1.2, type: 'spring', bounce: 0.3 }}
-                style={{ textAlign: 'center' }}
+                initial={{ opacity: 0, scale: 0.9, filter: 'contrast(100%)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'contrast(150%)' }}
+                exit={{ opacity: 0, scale: 1.5, filter: 'blur(20px)' }}
+                transition={{ duration: 0.8 }}
+                style={{ textAlign: 'center', fontFamily: '"Share Tech Mono", monospace' }}
               >
-                <motion.h1
-                  className="text-gradient"
-                  style={{ fontSize: '6rem', fontWeight: 900, margin: 0, letterSpacing: '12px', textTransform: 'uppercase' }}
-                  animate={{ textShadow: ['0 0 0px rgba(108,99,255,0)', '0 0 60px rgba(108,99,255,0.7)', '0 0 0px rgba(108,99,255,0)'] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                >
-                  Aenex
-                </motion.h1>
+                <div style={{ position: 'relative', display: 'inline-block' }}>
+                  <motion.h1 
+                    style={{ fontSize: '7rem', fontWeight: 900, margin: 0, letterSpacing: '14px', textTransform: 'uppercase', color: 'var(--text-primary)' }}
+                    animate={{ 
+                      textShadow: [
+                        '2px 2px 0 var(--accent-primary), -2px -2px 0 var(--accent-secondary)',
+                        '-2px -2px 0 var(--accent-primary), 2px 2px 0 var(--accent-secondary)',
+                        '0px 0px 20px var(--accent-primary), 0px 0px 40px var(--accent-secondary)',
+                        '2px -2px 0 var(--accent-primary), -2px 2px 0 var(--accent-secondary)',
+                        '0px 0px 0px transparent'
+                      ],
+                      x: [0, -3, 3, -1, 1, 0],
+                      opacity: [1, 0.8, 1, 0.5, 1]
+                    }}
+                    transition={{ duration: 0.3, repeat: Infinity, repeatDelay: 2.5 }}
+                  >
+                    AENEX
+                  </motion.h1>
+                  {/* Glitch Overlay */}
+                  <motion.h1 
+                    style={{ fontSize: '7rem', fontWeight: 900, margin: 0, letterSpacing: '14px', textTransform: 'uppercase', color: 'var(--accent-primary)', position: 'absolute', top: 0, left: 0, zIndex: -1, mixBlendMode: 'screen', opacity: 0.5 }}
+                    animate={{ 
+                      x: [-4, 4, -4],
+                      clipPath: [
+                        'inset(10% 0 80% 0)',
+                        'inset(80% 0 10% 0)',
+                        'inset(40% 0 40% 0)'
+                      ]
+                    }}
+                    transition={{ duration: 0.2, repeat: Infinity, repeatType: 'mirror' }}
+                  >
+                    AENEX
+                  </motion.h1>
+                </div>
+                
                 <motion.p
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7, duration: 0.8 }}
-                  style={{ color: 'var(--text-secondary)', fontSize: '1.5rem', letterSpacing: '8px', textTransform: 'uppercase', marginTop: '1rem', fontWeight: 600 }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                  style={{ color: 'var(--accent-secondary)', fontSize: '1.5rem', letterSpacing: '8px', textTransform: 'uppercase', marginTop: '1rem', fontWeight: 600, textShadow: '0 0 10px var(--accent-secondary-glow)' }}
                 >
-                  Welcome
+                  SYSTEM INITIALIZED
                 </motion.p>
               </motion.div>
             )}
