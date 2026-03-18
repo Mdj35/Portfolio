@@ -19,6 +19,7 @@ import {
 } from './Designs/Design';
 import AboutSection from './Component/AboutSection';
 import experiences from './Component/Experiences';
+import ParticleBackground from './Component/ParticleBackground';
 
 const App = () => {
   const [splashState, setSplashState] = useState(0); // 0 = Lottie, 1 = Aenex, 2 = Main
@@ -214,6 +215,8 @@ const App = () => {
         `}</style>
       </Header>
 
+      <ParticleBackground />
+
       {splashState < 2 ? (
         <SplashScreenWrapper>
           <AnimatePresence mode="wait">
@@ -246,9 +249,9 @@ const App = () => {
                 style={{ textAlign: 'center', fontFamily: '"Share Tech Mono", monospace' }}
               >
                 <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <motion.h1 
+                  <motion.h1
                     style={{ fontSize: '7rem', fontWeight: 900, margin: 0, letterSpacing: '14px', textTransform: 'uppercase', color: 'var(--text-primary)' }}
-                    animate={{ 
+                    animate={{
                       textShadow: [
                         '2px 2px 0 var(--accent-primary), -2px -2px 0 var(--accent-secondary)',
                         '-2px -2px 0 var(--accent-primary), 2px 2px 0 var(--accent-secondary)',
@@ -264,9 +267,9 @@ const App = () => {
                     AENEX
                   </motion.h1>
                   {/* Glitch Overlay */}
-                  <motion.h1 
+                  <motion.h1
                     style={{ fontSize: '7rem', fontWeight: 900, margin: 0, letterSpacing: '14px', textTransform: 'uppercase', color: 'var(--accent-primary)', position: 'absolute', top: 0, left: 0, zIndex: -1, mixBlendMode: 'screen', opacity: 0.5 }}
-                    animate={{ 
+                    animate={{
                       x: [-4, 4, -4],
                       clipPath: [
                         'inset(10% 0 80% 0)',
@@ -279,7 +282,7 @@ const App = () => {
                     AENEX
                   </motion.h1>
                 </div>
-                
+
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
