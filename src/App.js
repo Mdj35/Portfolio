@@ -3,7 +3,7 @@ import Lottie from 'lottie-react';
 import projects from './Component/Projects';
 import ProjectModal from './Component/ProjectModal';
 import { FaFacebook, FaInstagram, FaEnvelope, FaPhone, FaBars, FaTimes, FaDownload } from 'react-icons/fa';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import certificates from './Component/Certificates'; 
 import splashAnimation from './splash.json';
 import {
@@ -14,44 +14,39 @@ import {
   CertificatesSection,
   CertificateList,
   CertificateCard,
-  SplashScreenWrapper
+  SplashScreenWrapper,
+  Header
 } from './Designs/Design';
 import AboutSection from './Component/AboutSection';
 import experiences from './Component/Experiences';
 
 const App = () => {
-  const [showSplash, setShowSplash] = useState(true);
+  const [splashState, setSplashState] = useState(0); // 0 = Lottie, 1 = Aenex, 2 = Main
   const [isScrolled, setIsScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { scrollY } = useScroll();
-  const headerY = useTransform(scrollY, [0, 150], [0, -6]);
-  const headerBg = useTransform(
-    scrollY,
-    [0, 150],
-    ['rgba(0,0,0,0)', 'rgba(255,255,255,0.95)']
-  );
-  const headerShadow = useTransform(
-    scrollY,
-    [0, 150],
-    ['0px 0px 0px rgba(0,0,0,0)', '0 10px 30px rgba(0,0,0,0.12)']
-  );
-  const headerPadding = useTransform(scrollY, [0, 150], ['1.2rem 2rem', '0.5rem 2rem']);
+  // Scroll Progress Hooks
+  const { scrollY, scrollYProgress } = useScroll();
+  const orb1Y = useTransform(scrollYProgress, [0, 1], [0, -300]);
+  const orb2Y = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   useEffect(() => {
     const unsubscribe = scrollY.onChange((v) => {
-      setIsScrolled(v > 120);
+      setIsScrolled(v > 50);
     });
     return () => unsubscribe && unsubscribe();
   }, [scrollY]);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowSplash(false);
-    }, 3000);
-    return () => clearTimeout(timer);
+    const timer1 = setTimeout(() => {
+      setSplashState(1);
+    }, 2500);
+    const timer2 = setTimeout(() => {
+      setSplashState(2);
+    }, 5500);
+    return () => { clearTimeout(timer1); clearTimeout(timer2); };
   }, []);
 
   const handleProjectClick = (project) => {
@@ -69,7 +64,7 @@ const App = () => {
     try {
       const res = await fetch('/Oani-portfolio.pdf');
       if (!res.ok) {
-        alert('Portfolio PDF not found. Please add `Oani-portfolio.pdf` to the `public/` folder or provide a hosted URL.');
+        alert('Portfolio PDF not found. Please add `Oani-portfolio.pdf` to the `public/` folder.');
         return;
       }
       const blob = await res.blob();
@@ -84,260 +79,263 @@ const App = () => {
       URL.revokeObjectURL(blobUrl);
     } catch (err) {
       console.error('Download failed', err);
-      alert('Unable to download portfolio. Please check your network connection or upload `Oani-portfolio.pdf` to the `public/` folder.');
+      alert('Unable to download portfolio.');
     }
+  };
+
+  // Reusable scroll animation settings
+  const viewportSettings = { once: false, amount: 0.2 };
+  
+  const sectionHeaderVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+  };
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.2 } }
+  };
+
+  const popInVariants = {
+    hidden: { opacity: 0, scale: 0.8, y: 30 },
+    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, type: 'spring', stiffness: 100 } }
+  };
+
+  const slideInRight = {
+    hidden: { opacity: 0, x: 50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, type: 'spring' } }
+  };
+
+  const slideInLeft = {
+    hidden: { opacity: 0, x: -50 },
+    visible: { opacity: 1, x: 0, transition: { duration: 0.6, type: 'spring' } }
   };
 
   return (
     <>
-      <motion.header
+      <Header
+        className={isScrolled ? 'scrolled' : ''}
         style={{
-          position: "fixed",
-          left: 0,
-          right: 0,
-          top: 0,
-          height: 64,
-          zIndex: 9999,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: "1rem",
-          y: headerY,
-          background: headerBg,
-          boxShadow: headerShadow,
-          padding: headerPadding,
+          background: isScrolled ? 'var(--surface-glass)' : 'transparent',
+          boxShadow: isScrolled ? '0 10px 30px rgba(0,0,0,0.3)' : 'none',
+          borderBottom: isScrolled ? '1px solid var(--surface-border)' : '1px solid transparent',
+          padding: isScrolled ? '1rem 4rem' : '1.5rem 4rem',
         }}
-        aria-label="Main header"
+        as={motion.header}
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.6 }}
       >
-        {/* === Logo / Brand === */}
         <h1
+          className="text-gradient"
           style={{
             margin: 0,
-            fontSize: "1.25rem",
-            color: isScrolled ? "#111" : "#fff",
+            fontSize: '1.5rem',
+            fontWeight: 800,
             zIndex: 1001,
+            cursor: 'pointer'
           }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         >
           My Portfolio
         </h1>
 
-        {/* === Desktop Navigation === */}
         <nav
           className="desktop-nav"
-          style={{
-            display: "flex",
-            gap: "1rem",
-          }}
+          style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}
         >
-          <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#about">
-            About
-          </a>
-          <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#projects">
-            Projects
-          </a>
-          <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#experience">
-            Experience
-          </a>
-          <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#certificates">
-            Certificates
-          </a>
-          <a style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }} href="#contact">
-            Contact
-          </a>
+          {['About', 'Projects', 'Experience', 'Certificates', 'Contact'].map((item) => (
+            <a 
+              key={item}
+              style={{
+                color: 'var(--text-primary)', 
+                textDecoration: 'none',
+                fontWeight: 600,
+                fontSize: '0.95rem',
+                transition: 'color 0.3s ease',
+              }} 
+              href={`#${item.toLowerCase()}`}
+              onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-primary)'}
+              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
+            >
+              {item}
+            </a>
+          ))}
         </nav>
 
-        {/* === Mobile Menu Toggle === */}
         <div
           className="mobile-menu-icon"
-          style={{
-            display: "none",
-            cursor: "pointer",
-            zIndex: 1001,
-            padding: "0.5rem",
-            marginLeft: "auto",
-          }}
+          style={{ cursor: 'pointer', zIndex: 1001, display: 'none' }}
           onClick={() => setMenuOpen((prev) => !prev)}
         >
-          {menuOpen ? (
-            <FaTimes size={22} color={isScrolled ? "#111" : "#fff"} />
-          ) : (
-            <FaBars size={22} color={isScrolled ? "#111" : "#fff"} />
-          )}
+          {menuOpen ? <FaTimes size={24} color="#fff" /> : <FaBars size={24} color="#fff" />}
         </div>
 
-        {/* === Mobile Menu Dropdown === */}
+        {/* Mobile Dropdown */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
           style={{
-            position: "absolute",
-            top: "64px",
+            position: 'absolute',
+            top: '100%',
             left: 0,
             right: 0,
-            background: isScrolled ? "rgba(255,255,255,0.95)" : "rgba(0,0,0,0.95)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "1.2rem",
-            padding: "1.5rem 0",
-            pointerEvents: menuOpen ? "auto" : "none",
+            background: 'var(--bg-secondary)',
+            borderBottom: '1px solid var(--surface-border)',
+            display: menuOpen ? 'flex' : 'none',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1.5rem',
+            padding: '2rem 0',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
             zIndex: 1000,
           }}
         >
-          <a onClick={() => setMenuOpen(false)} href="#about" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
-            About
-          </a>
-          <a onClick={() => setMenuOpen(false)} href="#projects" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
-            Projects
-          </a>
-          <a onClick={() => setMenuOpen(false)} href="#experience" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
-            Experience
-          </a>
-          <a onClick={() => setMenuOpen(false)} href="#certificates" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
-            Certificates
-          </a>
-          <a onClick={() => setMenuOpen(false)} href="#contact" style={{ color: isScrolled ? "#111" : "#fff", textDecoration: "none" }}>
-            Contact
-          </a>
+          {['About', 'Projects', 'Experience', 'Certificates', 'Contact'].map((item) => (
+            <a
+              key={item}
+              onClick={() => setMenuOpen(false)}
+              href={`#${item.toLowerCase()}`}
+              style={{
+                color: 'var(--text-primary)',
+                textDecoration: 'none',
+                fontSize: '1.2rem',
+                fontWeight: 600
+              }}
+            >
+              {item}
+            </a>
+          ))}
         </motion.div>
 
-        {/* === Mobile Responsive Styling === */}
         <style>{`
           @media screen and (max-width: 768px) {
-            .desktop-nav {
-              display: none !important;
-            }
-            .mobile-menu-icon {
-              display: flex !important;
-              align-items: center;
-              justify-content: center;
-            }
-            /* Ensure header padding is consistent */
-            motion.header {
-              padding: 0 1rem !important;
-            }
+            .desktop-nav { display: none !important; }
+            .mobile-menu-icon { display: flex !important; margin-left: auto; }
+            header { padding: 1rem 1.5rem !important; }
           }
         `}</style>
-      </motion.header>
+      </Header>
 
-      {showSplash ? (
+      {splashState < 2 ? (
         <SplashScreenWrapper>
-          <Lottie animationData={splashAnimation} loop={false} />
+          <AnimatePresence mode="wait">
+            {splashState === 0 ? (
+              <motion.div
+                key="loading-lottie"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, filter: 'blur(10px)', scale: 1.1 }}
+                transition={{ duration: 0.6 }}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+              >
+                <Lottie animationData={splashAnimation} loop={false} style={{ width: 300 }} />
+                <motion.h2 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  style={{ color: '#fff', marginTop: '1rem', letterSpacing: '4px', textTransform: 'uppercase', fontSize: '1.2rem' }}
+                >
+                  Loading Portfolio
+                </motion.h2>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="ign-aenex"
+                initial={{ opacity: 0, scale: 0.8, filter: 'blur(20px)' }}
+                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                exit={{ opacity: 0, y: -40, filter: 'blur(10px)' }}
+                transition={{ duration: 1.2, type: 'spring', bounce: 0.3 }}
+                style={{ textAlign: 'center' }}
+              >
+                <motion.h1 
+                  className="text-gradient"
+                  style={{ fontSize: '6rem', fontWeight: 900, margin: 0, letterSpacing: '12px', textTransform: 'uppercase' }}
+                  animate={{ textShadow: ['0 0 0px rgba(108,99,255,0)', '0 0 60px rgba(108,99,255,0.7)', '0 0 0px rgba(108,99,255,0)'] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  Aenex
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.7, duration: 0.8 }}
+                  style={{ color: 'var(--text-secondary)', fontSize: '1.5rem', letterSpacing: '8px', textTransform: 'uppercase', marginTop: '1rem', fontWeight: 600 }}
+                >
+                  Welcome
+                </motion.p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </SplashScreenWrapper>
       ) : (
         <>
           <Container>
             <AboutSection />
 
-            <ProjectsSection
-              id="projects"
-              style={{
-                backgroundColor: '#0b0d18',
-                color: '#fff',
-                padding: '6rem 2rem',
-                position: 'relative',
-                overflow: 'hidden',
-              }}
-            >
-              {/* Animated Title */}
+            <ProjectsSection id="projects">
+              <motion.div className="bg-orb bg-orb-2" style={{ y: orb1Y, animation: 'float 10s ease-in-out infinite' }} />
               <motion.div
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1 }}
-                style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportSettings}
+                variants={sectionHeaderVariants}
+                style={{ textAlign: 'center', marginBottom: '4rem', position: 'relative', zIndex: 2 }}
               >
-                <h2 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
                   My Projects
                 </h2>
-                <p style={{ color: '#ff4d6d', fontSize: '1.1rem' }}>
+                <p className="text-gradient" style={{ fontSize: '1.2rem', fontWeight: 600 }}>
                   Some Of My Distinguished Works
                 </p>
               </motion.div>
 
-              {/* Scroll Animation Wrapper */}
               <motion.div
+                className="projects-grid"
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.2 }}
-                variants={{
-                  hidden: {},
-                  visible: {
-                    transition: {
-                      staggerChildren: 0.2,
-                    },
-                  },
-                }}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                  gap: '2rem',
-                  justifyItems: 'center',
-                }}
+                viewport={viewportSettings}
+                variants={staggerContainer}
+                style={{ position: 'relative', zIndex: 2 }}
               >
                 {projects.map((project, index) => (
                   <motion.div
                     key={project.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 80, scale: 0.95 },
-                      visible: {
-                        opacity: 1,
-                        y: 0,
-                        scale: 1,
-                        transition: { duration: 0.8, ease: 'easeOut' },
-                      },
-                    }}
+                    className="glass-panel"
+                    variants={popInVariants}
                     whileHover={{
-                      scale: 1.05,
-                      boxShadow: '0 12px 25px rgba(255, 77, 109, 0.3)',
+                      y: -15,
+                      scale: 1.03,
+                      boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
+                      borderColor: 'rgba(108, 99, 255, 0.6)'
                     }}
                     onClick={() => handleProjectClick(project)}
                     style={{
-                      background: '#111324',
-                      borderRadius: '1rem',
-                      overflow: 'hidden',
-                      boxShadow: '0 8px 20px rgba(0,0,0,0.5)',
-                      width: '100%',
-                      maxWidth: '340px',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease',
+                      overflow: 'hidden',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'border-color 0.3s ease',
                     }}
                   >
-                    {/* Image */}
-                    <motion.img
-                      src={project.image}
-                      alt={project.title}
-                      draggable="false"
-                      style={{
-                        width: '100%',
-                        height: '200px',
-                        objectFit: 'cover',
-                      }}
-                      whileHover={{ scale: 1.08 }}
-                      transition={{ duration: 0.4 }}
-                    />
-                    <div style={{ padding: '1rem' }}>
-                      <p
-                        style={{
-                          color: '#ff4d6d',
-                          fontSize: '0.9rem',
-                          marginBottom: '0.3rem',
-                        }}
-                      >
-                        {project.category || 'Project'}
-                      </p>
-                      <h3 style={{ fontSize: '1.2rem', margin: 0 }}>{project.title}</h3>
-                      <p
-                        style={{
-                          color: '#ff4d6d',
-                          fontSize: '0.9rem',
-                          marginTop: '0.5rem',
-                          textDecoration: 'underline',
-                        }}
-                      >
-                        View Details →
-                      </p>
+                    <div style={{ overflow: 'hidden', height: '220px' }}>
+                      <motion.img
+                        src={project.image}
+                        alt={project.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        whileHover={{ scale: 1.15 }}
+                        transition={{ duration: 0.6 }}
+                      />
+                    </div>
+                    <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                      <span style={{ color: 'var(--accent-primary)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem' }}>
+                        {project.category || 'Development'}
+                      </span>
+                      <h3 style={{ fontSize: '1.4rem', margin: '0 0 1rem', color: 'var(--text-primary)' }}>{project.title}</h3>
+                      <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem' }}>
+                        View Details <span style={{ color: 'var(--accent-secondary)' }}>&rarr;</span>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -346,95 +344,97 @@ const App = () => {
 
             {/* Experience Section */}
             <motion.section
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, amount: 0.2 }}
-              transition={{ duration: 1 }}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportSettings}
               style={{
-                backgroundColor: '#111324',
-                color: '#fff',
+                backgroundColor: 'var(--bg-secondary)',
                 padding: '6rem 2rem',
                 position: 'relative',
+                zIndex: 1,
+                overflow: 'hidden'
               }}
               id="experience"
             >
-              {/* Section Title */}
+              <motion.div className="bg-orb bg-orb-1" style={{ y: orb2Y, opacity: 0.3, left: 'auto', right: '-10%' }} />
+
               <motion.div
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1 }}
-                style={{ textAlign: 'center', marginBottom: '3.5rem' }}
+                variants={sectionHeaderVariants}
+                style={{ textAlign: 'center', marginBottom: '4rem' }}
               >
-                <h2 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '0.5rem' }}>
+                <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
                   Experience
                 </h2>
-                <p style={{ color: '#ff4d6d', fontSize: '1.1rem' }}>
+                <p className="text-gradient" style={{ fontSize: '1.2rem', fontWeight: 600 }}>
                   My Professional Journey
                 </p>
               </motion.div>
 
-              {/* Experience Timeline */}
               <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.2 }}
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.2 } },
-                }}
-                style={{
-                  maxWidth: '800px',
-                  margin: '0 auto',
-                  position: 'relative',
-                }}
+                variants={staggerContainer}
+                style={{ maxWidth: '900px', margin: '0 auto', position: 'relative' }}
               >
+                <motion.div 
+                  initial={{ height: 0 }}
+                  whileInView={{ height: '100%' }}
+                  transition={{ duration: 1.5, ease: "easeInOut" }}
+                  style={{ position: 'absolute', left: '26px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary), transparent)', zIndex: 0 }} 
+                />
+
                 {experiences.map((exp, index) => (
                   <motion.div
                     key={exp.id}
-                    variants={{
-                      hidden: { opacity: 0, x: index % 2 === 0 ? -50 : 50 },
-                      visible: {
-                        opacity: 1,
-                        x: 0,
-                        transition: { duration: 0.7, ease: 'easeOut' },
-                      },
-                    }}
-                    whileHover={{ scale: 1.02, boxShadow: '0 12px 30px rgba(255, 77, 109, 0.2)' }}
+                    variants={slideInLeft}
+                    className="glass-panel"
                     style={{
-                      background: '#0b0d18',
-                      borderLeft: '4px solid #ff4d6d',
-                      padding: '1.5rem',
-                      marginBottom: '1.5rem',
-                      borderRadius: '0.5rem',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
+                      position: 'relative',
+                      padding: '2rem',
+                      marginBottom: '2rem',
+                      marginLeft: '4rem',
+                      zIndex: 1
                     }}
+                    whileHover={{ scale: 1.02, x: 10, borderColor: 'var(--accent-secondary)' }}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
-                      <h3 style={{ margin: 0, fontSize: '1.3rem', color: '#fff' }}>
-                        {exp.position}
-                      </h3>
-                      <span style={{ color: '#ff4d6d', fontSize: '0.9rem', fontWeight: '600' }}>
+                    <motion.div 
+                      initial={{ scale: 0 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ delay: index * 0.2 + 0.3, type: "spring" }}
+                      style={{ position: 'absolute', left: '-50px', top: '32px', width: '16px', height: '16px', borderRadius: '50%', background: 'var(--bg-secondary)', border: '4px solid var(--accent-secondary)', zIndex: 2, boxShadow: '0 0 10px var(--accent-secondary-glow)' }} 
+                    />
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <h3 style={{ margin: 0, fontSize: '1.4rem', color: 'var(--text-primary)' }}>{exp.position}</h3>
+                        <p style={{ margin: '0.2rem 0 0', color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 500 }}>{exp.company}</p>
+                      </div>
+                      <span style={{
+                        background: 'rgba(108, 99, 255, 0.15)',
+                        color: 'var(--text-primary)',
+                        padding: '0.4rem 1rem',
+                        borderRadius: '20px',
+                        fontSize: '0.9rem',
+                        fontWeight: '600',
+                        border: '1px solid rgba(108, 99, 255, 0.3)'
+                      }}>
                         {exp.duration}
                       </span>
                     </div>
-                    <p style={{ margin: '0.3rem 0 0.8rem', color: '#aaa', fontSize: '1rem' }}>
-                      {exp.company}
-                    </p>
-                    <p style={{ margin: '0.5rem 0', color: '#ddd', lineHeight: '1.6' }}>
+                    
+                    <p style={{ margin: '1rem 0', color: 'var(--text-primary)', lineHeight: '1.7', opacity: 0.9 }}>
                       {exp.description}
                     </p>
-                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem', flexWrap: 'wrap' }}>
+                    
+                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
                       {exp.skills.map((skill, idx) => (
                         <span
                           key={idx}
                           style={{
-                            background: 'rgba(255, 77, 109, 0.15)',
-                            color: '#ff4d6d',
-                            padding: '0.3rem 0.8rem',
-                            borderRadius: '20px',
-                            fontSize: '0.8rem',
+                            background: 'var(--surface-border)',
+                            color: 'var(--text-secondary)',
+                            padding: '6px 14px',
+                            borderRadius: '8px',
+                            fontSize: '0.85rem',
+                            fontWeight: 500
                           }}
                         >
                           {skill}
@@ -446,206 +446,124 @@ const App = () => {
               </motion.div>
             </motion.section>
 
-            {/* Certificates Section */}
             <CertificatesSection id="certificates">
               <motion.h2
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1 }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportSettings}
+                variants={sectionHeaderVariants}
               >
-                Certificates
+                Certificates & Awards
               </motion.h2>
               <CertificateList
                 as={motion.div}
                 initial="hidden"
                 whileInView="visible"
-                viewport={{ once: false, amount: 0.2 }}
-                variants={{
-                  hidden: {},
-                  visible: { transition: { staggerChildren: 0.12 } },
-                }}
+                viewport={viewportSettings}
+                variants={staggerContainer}
               >
                 {certificates.map((certificate, index) => (
                   <CertificateCard
                     as={motion.div}
                     key={index}
-                    variants={{
-                      hidden: { opacity: 0, y: 40, scale: 0.98 },
-                      visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: 'easeOut' } },
-                    }}
-                    whileHover={{ y: -8, scale: 1.03, boxShadow: '0 14px 40px rgba(0,0,0,0.18)' }}
-                    whileTap={{ scale: 0.995 }}
-                    style={{ borderRadius: '12px', overflow: 'hidden', minHeight: '260px', display: 'flex', flexDirection: 'column' }}
+                    variants={popInVariants}
                   >
-                    <motion.img
-                      src={certificate.image}
-                      alt={certificate.title}
-                      draggable="false"
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.06, rotate: 1 }}
-                      transition={{ duration: 0.45 }}
-                      style={{ width: '100%', height: '200px', objectFit: 'cover', borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
-                    />
-                    <div style={{ padding: '0.9rem' }}>
-                      <h3 style={{ margin: '0.25rem 0 0.5rem' }}>{certificate.title}</h3>
-                      <p style={{ margin: 0 }}>{certificate.description}</p>
+                    <img src={certificate.image} alt={certificate.title} draggable="false" />
+                    <div className="content">
+                      <h3>{certificate.title}</h3>
+                      <p>{certificate.description}</p>
                     </div>
                   </CertificateCard>
                 ))}
               </CertificateList>
             </CertificatesSection>
-  
+
             <ContactSection id="contact">
               <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: false, amount: 0.2 }}
-                transition={{ duration: 1 }}
+                initial="hidden"
+                whileInView="visible"
+                viewport={viewportSettings}
+                variants={sectionHeaderVariants}
+                style={{ maxWidth: '600px', margin: '0 auto' }}
               >
-                <h2>Contact Me</h2>
-                <p>Feel free to reach out through any of the platforms below!</p>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '1rem',
-                  }}
+                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>Let's Work Together</h2>
+                <p>Feel free to reach out through any of the platforms below. I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.</p>
+                
+                <motion.div 
+                  className="social-grid" 
+                  style={{ marginTop: '3rem' }}
+                  variants={staggerContainer}
                 >
-                  <motion.a
-                    href="https://www.facebook.com/vynceian.oani.1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.15, rotate: 8, y: -6, boxShadow: '0 12px 30px rgba(66,103,178,0.16)' }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: 'spring', stiffness: 360, damping: 18 }}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 44,
-                      height: 44,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, rgba(66,103,178,0.12), rgba(66,103,178,0.04))',
-                    }}
-                  >
-                    <FaFacebook size={18} color="#4267B2" />
-                  </motion.a>
-
-                  <motion.a
-                    href="https://mail.google.com/mail/?view=cm&fs=1&to=vynceian.oani@hcdc.edu.ph"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.12, rotate: -10, y: -4, boxShadow: '0 12px 30px rgba(212,70,56,0.14)' }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: 'spring', stiffness: 340, damping: 18 }}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 44,
-                      height: 44,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, rgba(212,70,56,0.10), rgba(212,70,56,0.04))',
-                    }}
-                  >
-                    <FaEnvelope size={18} color="#D44638" />
-                  </motion.a>
-
-                  <motion.a
-                    href="https://www.instagram.com/vynceian35"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.18, y: -6, boxShadow: '0 12px 30px rgba(225,48,108,0.14)' }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: 'spring', stiffness: 350, damping: 18 }}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: 44,
-                      height: 44,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, rgba(225,48,108,0.10), rgba(225,48,108,0.04))',
-                    }}
-                  >
-                    <FaInstagram size={18} color="#E1306C" />
-                  </motion.a>
-
-                  <motion.div
-                    style={{ position: 'relative', display: 'inline-block' }}
-                    whileHover={{}}
-                  >
-                    <motion.button
-                      onClick={downloadPortfolio}
-                      title="Download Portfolio (PDF)"
+                  {[
+                    { icon: FaFacebook, link: "https://www.facebook.com/vynceian.oani.1", color: "#4267B2" },
+                    { icon: FaEnvelope, link: "https://mail.google.com/mail/?view=cm&fs=1&to=vynceian.oani@hcdc.edu.ph", color: "#D44638" },
+                    { icon: FaInstagram, link: "https://www.instagram.com/vynceian35", color: "#E1306C" },
+                    { icon: FaPhone, link: "tel:09943189625", color: "#34A853" }
+                  ].map((social, i) => (
+                    <motion.a
+                      key={i}
+                      href={social.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="glass-panel"
+                      variants={popInVariants}
+                      whileHover={{ y: -8, scale: 1.15, boxShadow: `0 15px 30px ${social.color}33`, borderColor: social.color }}
+                      whileTap={{ scale: 0.9 }}
                       style={{
-                        background: 'linear-gradient(135deg,#6c63ff,#9a8bff)',
-                        border: 'none',
-                        padding: 8,
-                        borderRadius: '50%',
-                        cursor: 'pointer',
-                        display: 'inline-flex',
+                        display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                      }}
-                      whileHover={{ scale: 1.2, rotate: [0, 8, -6, 0] }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ duration: 0.6, type: 'spring', stiffness: 320, damping: 22 }}
-                      aria-label="Download Portfolio"
-                    >
-                      <FaDownload size={18} color="#fff" />
-                    </motion.button>
-
-                    <motion.span
-                      initial={{ opacity: 0, y: 6 }}
-                      whileHover={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.18 }}
-                      style={{
-                        position: 'absolute',
-                        bottom: 'calc(100% + 8px)',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        padding: '6px 8px',
-                        borderRadius: 6,
-                        background: 'rgba(0,0,0,0.8)',
-                        color: '#fff',
-                        fontSize: '0.72rem',
-                        pointerEvents: 'none',
-                        whiteSpace: 'nowrap',
+                        width: '60px',
+                        height: '60px',
+                        borderRadius: '50%',
+                        textDecoration: 'none',
+                        transition: 'border-color 0.3s'
                       }}
                     >
-                      Download PDF
-                    </motion.span>
-                  </motion.div>
+                      <social.icon size={26} color={social.color} />
+                    </motion.a>
+                  ))}
 
-                  <motion.a
-                    href="tel:09943189625"
-                    whileHover={{ scale: 1.12, y: -4, boxShadow: '0 12px 30px rgba(52,168,83,0.10)' }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ type: 'spring', stiffness: 340, damping: 18 }}
+                  <motion.button
+                    onClick={downloadPortfolio}
+                    className="glass-panel"
+                    variants={popInVariants}
+                    whileHover={{ y: -8, scale: 1.15, boxShadow: '0 15px 30px rgba(108, 99, 255, 0.4)', borderColor: 'var(--accent-primary)' }}
+                    whileTap={{ scale: 0.9 }}
                     style={{
-                      display: 'inline-flex',
+                      display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      width: 44,
-                      height: 44,
+                      width: '60px',
+                      height: '60px',
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, rgba(52,168,83,0.08), rgba(52,168,83,0.03))',
+                      border: '1px solid var(--surface-border)',
+                      cursor: 'pointer',
+                      background: 'var(--accent-primary)',
+                      color: '#fff'
                     }}
+                    title="Download Portfolio PDF"
                   >
-                    <FaPhone size={18} color="#34A853" />
-                  </motion.a>
-                </div>
-                <p style={{ marginTop: '1rem' }}>Phone: 09943189625</p>
+                    <FaDownload size={22} />
+                  </motion.button>
+                </motion.div>
+                
+                <motion.div 
+                  variants={popInVariants}
+                  whileHover={{ scale: 1.05 }}
+                  style={{ marginTop: '3rem', display: 'inline-block', padding: '1rem 2rem', borderRadius: '30px', background: 'var(--surface-glass)', border: '1px solid var(--surface-border)', cursor: 'default' }}
+                >
+                  <span style={{ color: 'var(--text-secondary)' }}>Prefer to call? </span>
+                  <span className="text-gradient" style={{ fontWeight: 700, fontSize: '1.2rem', marginLeft: '0.5rem' }}>09943189625</span>
+                </motion.div>
               </motion.div>
             </ContactSection>
-  
+
             <Footer>
-              <p>© 2026 My Portfolio</p>
+              <p>© {new Date().getFullYear()} Vynce Ian Oani. Built with React & Framer Motion.</p>
             </Footer>
           </Container>
 
-          {/* Project Modal */}
           <ProjectModal 
             project={selectedProject} 
             isOpen={isModalOpen} 
@@ -658,5 +576,3 @@ const App = () => {
 };
 
 export default App;
-
-
