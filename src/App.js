@@ -303,7 +303,7 @@ const App = () => {
 
             <ProjectsSection id="projects">
               <motion.div className="bg-orb bg-orb-2" style={{ y: orb1Y, animation: 'float 10s ease-in-out infinite' }} />
-              
+
               <motion.div
                 initial="hidden"
                 whileInView="visible"
@@ -350,11 +350,11 @@ const App = () => {
                 whileInView="visible"
                 viewport={viewportSettings}
                 variants={staggerContainer}
-                style={{ 
-                  position: 'relative', 
-                  zIndex: 2, 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
                   gap: '2.5rem',
                   alignItems: 'stretch'
                 }}
@@ -534,6 +534,13 @@ const App = () => {
                     as={motion.div}
                     key={index}
                     variants={popInVariants}
+                    whileHover={{ 
+                      y: -15, 
+                      scale: 1.03, 
+                      boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
+                      borderColor: 'rgba(108, 99, 255, 0.6)'
+                    }}
+                    style={{ cursor: 'pointer', transition: 'border-color 0.3s ease' }}
                   >
                     <img src={certificate.image} alt={certificate.title} draggable="false" />
                     <div className="content">

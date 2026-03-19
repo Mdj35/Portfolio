@@ -3,6 +3,9 @@ import sample from './sample.jpg'// Replace with your project's Lottie animation
 import church from './1.png'// Replace with your project's Lottie animation file
 import alampat from './alampat.png'
 import hcdc from "./hcdc.jpg";
+import skonnect from "./skonnect.png";
+import compass from "./compass.jpeg";
+import accessionx from "./accessionx.jpg"
 
 
 const projects = [
@@ -19,8 +22,8 @@ const projects = [
     id: 2,
     title: 'SKonnect',
     category: 'Capstone',
-    description: 'This is another amazing project.',
-    image: 'https://chat.google.com/u/0/api/get_attachment_url?url_type=FIFE_URL&content_type=image%2Fpng&attachment_token=AOo0EEXinF3SEcPViGSXnU8pxP%2Bfh1hZyHWxE%2FNhWLF%2F9fT2%2BU4L1vMY70JMYPmEWKYUGxIcSklZdL7EIpnV%2BjnCNR48opaUZGQm77Jlnm6uWKUKr%2BdrzCFfrtgM6VKzJ8vFkBkCDvjvhAo37urZ90fWUNXmI634YDCIJJCGxllLXX%2FCCAy4vt1IvK6W%2FcnMfVy1VYRqQm%2BXspFggQNjnvjPlfyHyzLV7e%2BTDcrBT9lqp7f7aAfTltY89rrVRxD0T6CHR%2BnY7QxkUT30IfqvcAzOUGZjDmHUGKD0wwA31dfZ0HOORKQeMIIM34sXDPwv4Pf9vSJxdjB4SgV0%2BpzL0U3yafYrUvnild28d8LHJzLDSocBbjEQKvd4di3Z89U5nSe6KsQDEwraopTughWuFcrXRC%2B%2F4r4en%2BQHbsOXa19A4A9kt9FlKBcUfC3T6qcWGug0xImOYVruDD9fjj7CTcxLWVPPIyrORLKmkUrM0PyOTNfPvYEFVKC%2FgVeuV2o%2BrRupLeRVrUun2HlD2ETARh8ujBv1PeFGnkHMUSyZZXquvyhJEMSA8c7QMByLvTpsAv%2FtHd%2FLrr6%2BrHjzQOQ%3D&allow_caching=true&sz=w512  ', // Replace with your project image path
+    description: 'SKonnect bridges the gap between Sangguniang Kabataan leaders and the youth using advanced machine learning, real-time analytics, and interactive engagement tools.',
+    image: skonnect,
     link: 'https://skonnect-project.vercel.app/', // Replace with your project link
     animation: projectAnimation,
   },
@@ -37,7 +40,7 @@ const projects = [
     id: 4,
     title: 'Alampat',
     category: 'Freelance',
-    description: 'This is another amazing project.',
+    description: 'ALAMPAT is created to promote all kinds of arts created by our indigenous people and protect their rights as the owner of their creation.',
     image: alampat, // Replace with your project image path
     link: 'https://alampat.vercel.app/', // Replace with your project link
     animation: projectAnimation,
@@ -46,9 +49,27 @@ const projects = [
     id: 5,
     title: 'HCDC Website',
     category: 'Freelance',
-    description: '',
+    description: 'The Official Website of The HCDC',
     image: hcdc,
     link: 'https://www.hcdc.edu.ph/',
+    animation: projectAnimation,
+  },
+  {
+    id: 6,
+    title: 'ComPASS',
+    category: 'Other Projects',
+    description: '',
+    image: compass,
+    link: 'https://blis-compass.vercel.app/',
+    animation: projectAnimation,
+  },
+  {
+    id: 7,
+    title: 'AccessionX',
+    category: 'Other Projects',
+    description: '',
+    image: accessionx,
+    link: 'https://accession-x.vercel.app',
     animation: projectAnimation,
   }
 ];
