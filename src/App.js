@@ -20,6 +20,9 @@ import {
 import AboutSection from './Component/AboutSection';
 import experiences from './Component/Experiences';
 import ParticleBackground from './Component/ParticleBackground';
+import VideoScroll from './Component/VideoScroll';
+import myVideo from './Component/download.mp4';
+
 
 const App = () => {
   const [splashState, setSplashState] = useState(0); // 0 = Lottie, 1 = Aenex, 2 = Main
@@ -300,6 +303,11 @@ const App = () => {
         <>
           <Container>
             <AboutSection />
+          </Container>
+
+          <VideoScroll videoSrc={myVideo} />
+
+          <Container>
 
             <ProjectsSection id="projects">
               <motion.div className="bg-orb bg-orb-2" style={{ y: orb1Y, animation: 'float 10s ease-in-out infinite' }} />
@@ -534,9 +542,9 @@ const App = () => {
                     as={motion.div}
                     key={index}
                     variants={popInVariants}
-                    whileHover={{ 
-                      y: -15, 
-                      scale: 1.03, 
+                    whileHover={{
+                      y: -15,
+                      scale: 1.03,
                       boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
                       borderColor: 'rgba(108, 99, 255, 0.6)'
                     }}
