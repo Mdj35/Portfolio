@@ -18,9 +18,9 @@ import {
   Header
 } from './Designs/Design';
 import AboutSection from './Component/AboutSection';
-import experiences from './Component/Experiences';
 import ParticleBackground from './Component/ParticleBackground';
 import VideoScroll from './Component/VideoScroll';
+import ExperienceSection from './Component/ExperienceSection';
 import myVideo from './Component/download.mp4';
 
 
@@ -31,11 +31,12 @@ const App = () => {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectFilter, setProjectFilter] = useState('All');
+  const [showHeader, setShowHeader] = useState(true);
+  const videoScrollRef = React.useRef(null);
 
   // Scroll Progress Hooks
   const { scrollY, scrollYProgress } = useScroll();
   const orb1Y = useTransform(scrollYProgress, [0, 1], [0, -300]);
-  const orb2Y = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   useEffect(() => {
     const unsubscribe = scrollY.onChange((v) => {
@@ -52,6 +53,33 @@ const App = () => {
       setSplashState(2);
     }, 5500);
     return () => { clearTimeout(timer1); clearTimeout(timer2); };
+  }, []);
+
+  // Hide header when VideoScroll section is visible
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.target === videoScrollRef.current) {
+          setShowHeader(!entry.isIntersecting);
+        }
+      });
+    }, observerOptions);
+
+    if (videoScrollRef.current) {
+      observer.observe(videoScrollRef.current);
+    }
+
+    return () => {
+      if (videoScrollRef.current) {
+        observer.unobserve(videoScrollRef.current);
+      }
+    };
   }, []);
 
   const handleProjectClick = (project) => {
@@ -107,10 +135,6 @@ const App = () => {
   };
 
 
-  const slideInLeft = {
-    hidden: { opacity: 0, x: -50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.6, type: 'spring' } }
-  };
 
   return (
     <>
@@ -417,109 +441,11 @@ const App = () => {
               </motion.div>
             </ProjectsSection>
 
-            {/* Experience Section */}
-            <motion.section
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportSettings}
-              style={{
-                backgroundColor: 'var(--bg-secondary)',
-                padding: '6rem 2rem',
-                position: 'relative',
-                zIndex: 1,
-                overflow: 'hidden'
-              }}
-              id="experience"
-            >
-              <motion.div className="bg-orb bg-orb-1" style={{ y: orb2Y, opacity: 0.3, left: 'auto', right: '-10%' }} />
-
-              <motion.div
-                variants={sectionHeaderVariants}
-                style={{ textAlign: 'center', marginBottom: '4rem' }}
-              >
-                <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
-                  Experience
-                </h2>
-                <p className="text-gradient" style={{ fontSize: '1.2rem', fontWeight: 600 }}>
-                  My Professional Journey
-                </p>
-              </motion.div>
-
-              <motion.div
-                variants={staggerContainer}
-                style={{ maxWidth: '900px', margin: '0 auto', position: 'relative' }}
-              >
-                <motion.div
-                  initial={{ height: 0 }}
-                  whileInView={{ height: '100%' }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
-                  style={{ position: 'absolute', left: '26px', top: '0', bottom: '0', width: '2px', background: 'linear-gradient(to bottom, var(--accent-primary), var(--accent-secondary), transparent)', zIndex: 0 }}
-                />
-
-                {experiences.map((exp, index) => (
-                  <motion.div
-                    key={exp.id}
-                    variants={slideInLeft}
-                    className="glass-panel"
-                    style={{
-                      position: 'relative',
-                      padding: '2rem',
-                      marginBottom: '2rem',
-                      marginLeft: '4rem',
-                      zIndex: 1
-                    }}
-                    whileHover={{ scale: 1.02, x: 10, borderColor: 'var(--accent-secondary)' }}
-                  >
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      whileInView={{ scale: 1 }}
-                      transition={{ delay: index * 0.2 + 0.3, type: "spring" }}
-                      style={{ position: 'absolute', left: '-50px', top: '32px', width: '16px', height: '16px', borderRadius: '50%', background: 'var(--bg-secondary)', border: '4px solid var(--accent-secondary)', zIndex: 2, boxShadow: '0 0 10px var(--accent-secondary-glow)' }}
-                    />
-
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
-                      <div>
-                        <h3 style={{ margin: 0, fontSize: '1.4rem', color: 'var(--text-primary)' }}>{exp.position}</h3>
-                        <p style={{ margin: '0.2rem 0 0', color: 'var(--text-secondary)', fontSize: '1rem', fontWeight: 500 }}>{exp.company}</p>
-                      </div>
-                      <span style={{
-                        background: 'rgba(108, 99, 255, 0.15)',
-                        color: 'var(--text-primary)',
-                        padding: '0.4rem 1rem',
-                        borderRadius: '20px',
-                        fontSize: '0.9rem',
-                        fontWeight: '600',
-                        border: '1px solid rgba(108, 99, 255, 0.3)'
-                      }}>
-                        {exp.duration}
-                      </span>
-                    </div>
-
-                    <p style={{ margin: '1rem 0', color: 'var(--text-primary)', lineHeight: '1.7', opacity: 0.9 }}>
-                      {exp.description}
-                    </p>
-
-                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem', flexWrap: 'wrap' }}>
-                      {exp.skills.map((skill, idx) => (
-                        <span
-                          key={idx}
-                          style={{
-                            background: 'var(--surface-border)',
-                            color: 'var(--text-secondary)',
-                            padding: '6px 14px',
-                            borderRadius: '8px',
-                            fontSize: '0.85rem',
-                            fontWeight: 500
-                          }}
-                        >
-                          {skill}
-                        </span>
-                      ))}
-                    </div>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </motion.section>
+            <ExperienceSection 
+              viewportSettings={viewportSettings}
+              sectionHeaderVariants={sectionHeaderVariants}
+              staggerContainer={staggerContainer}
+            />
 
             <CertificatesSection id="certificates">
               <motion.h2
