@@ -24,7 +24,7 @@ const experiences = [
     duration: "February 2026 - Present",
     description: "Fullstack Developer Intern responsible for building and maintaining web applications using Laravel backend and React frontend, with MySQL database management. Contributed to developing features and improving application performance.",
     skills: ["Laravel", "MySQL", "React"],
-    projectIds: [2], // SKonnect
+    projectIds: [], // SKonnect
   },
 ];
 
