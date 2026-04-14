@@ -179,7 +179,7 @@ const ExperienceSection = ({
                 transition={{ delay: 0.3, type: "spring" }}
                 style={{
                   position: 'absolute',
-                  left: isMobile ? '-1.75rem' : '50%',
+                  left: isMobile ? '-1.75rem' : '49.3%',
                   top: '32px',
                   width: '16px',
                   height: '16px',

@@ -71,13 +71,14 @@ const App = () => {
       });
     }, observerOptions);
 
-    if (videoScrollRef.current) {
-      observer.observe(videoScrollRef.current);
+    const element = videoScrollRef.current;
+    if (element) {
+      observer.observe(element);
     }
 
     return () => {
-      if (videoScrollRef.current) {
-        observer.unobserve(videoScrollRef.current);
+      if (element) {
+        observer.unobserve(element);
       }
     };
   }, []);
@@ -138,7 +139,7 @@ const App = () => {
 
   return (
     <>
-      <Header
+      {showHeader && <Header
         className={isScrolled ? 'scrolled' : ''}
         style={{
           background: isScrolled ? 'var(--surface-glass)' : 'transparent',
@@ -241,7 +242,7 @@ const App = () => {
             header { padding: 1rem 1.5rem !important; }
           }
         `}</style>
-      </Header>
+      </Header>}
 
       <ParticleBackground />
 
