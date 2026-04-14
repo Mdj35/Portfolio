@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import experiences from './Experiences';
+import projects from './Projects';
 
 const ExperienceSection = ({ 
   viewportSettings, 
@@ -10,6 +11,7 @@ const ExperienceSection = ({
   const experienceRef = useRef(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isSmallMobile, setIsSmallMobile] = useState(window.innerWidth < 480);
+  const [hoveredExpId, setHoveredExpId] = useState(null);
   
   const { scrollYProgress } = useScroll({
     target: experienceRef,
@@ -193,15 +195,83 @@ const ExperienceSection = ({
               {/* Content Card */}
               <motion.div
                 className="glass-panel"
+                onMouseEnter={() => !isMobile && setHoveredExpId(exp.id)}
+                onMouseLeave={() => !isMobile && setHoveredExpId(null)}
                 style={{
                   padding: isSmallMobile ? '1rem' : isMobile ? '1.5rem' : '2rem',
                   borderRadius: '1.5rem',
                   border: '1px solid var(--surface-border)',
                   transition: 'border-color 0.3s ease',
-                  width: isMobile ? '100%' : '45%'
+                  width: isMobile ? '100%' : '45%',
+                  position: 'relative',
+                  overflow: 'visible'
                 }}
-                whileHover={{ scale: 1.02, borderColor: 'var(--accent-secondary)' }}
+                whileHover={!isMobile ? { scale: 1.02, borderColor: 'var(--accent-secondary)' } : {}}
               >
+                {/* Project Images Display on Hover (Desktop Only) */}
+                {!isMobile && hoveredExpId === exp.id && exp.projectIds && (
+                  <div style={{
+                    position: 'absolute',
+                    top: '-140px',
+                    right: '-120px',
+                    display: 'flex',
+                    gap: '1rem',
+                    zIndex: 30,
+                    pointerEvents: 'none'
+                  }}>
+                    {projects
+                      .filter(p => exp.projectIds.includes(p.id))
+                      .map((project, idx) => (
+                        <motion.div
+                          key={project.id}
+                          initial={{ opacity: 0, scale: 0.5, rotate: -45, y: 20 }}
+                          animate={{ 
+                            opacity: 1, 
+                            scale: 1, 
+                            rotate: [0, 5, -5, 0],
+                            y: 0,
+                            transition: { delay: idx * 0.1, type: 'spring', stiffness: 400 }
+                          }}
+                          exit={{ opacity: 0, scale: 0.5, rotate: 45 }}
+                          style={{
+                            width: '100px',
+                            height: '100px',
+                            borderRadius: '1rem',
+                            overflow: 'hidden',
+                            boxShadow: '0 10px 35px rgba(0, 240, 255, 0.4)',
+                            border: '2px solid var(--accent-primary)',
+                            backdropFilter: 'blur(10px)',
+                            position: 'relative'
+                          }}
+                        >
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover'
+                            }}
+                          />
+                          <motion.div
+                            animate={{ 
+                              background: [
+                                'rgba(0, 240, 255, 0)',
+                                'rgba(0, 240, 255, 0.2)',
+                                'rgba(0, 240, 255, 0)'
+                              ]
+                            }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              pointerEvents: 'none'
+                            }}
+                          />
+                        </motion.div>
+                      ))}
+                  </div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem', marginBottom: '1rem' }}>
                   <div>
                     <h3 style={{ 
@@ -261,6 +331,109 @@ const ExperienceSection = ({
                     </span>
                   ))}
                 </div>
+
+                {/* Mobile Project Display - Below Card */}
+                {isMobile && exp.projectIds && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    style={{
+                      marginTop: '1.5rem',
+                      paddingTop: '1.5rem',
+                      borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                      display: 'flex',
+                      gap: '1rem',
+                      justifyContent: 'center',
+                      flexWrap: 'wrap'
+                    }}
+                  >
+                    <p style={{
+                      width: '100%',
+                      margin: '0 0 0.5rem 0',
+                      fontSize: '0.85rem',
+                      color: 'var(--text-secondary)',
+                      textAlign: 'center',
+                      fontWeight: 600
+                    }}>
+                      Projects
+                    </p>
+                    {projects
+                      .filter(p => exp.projectIds.includes(p.id))
+                      .map((project, idx) => (
+                        <motion.a
+                          key={project.id}
+                          href={project.link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          initial={{ opacity: 0, scale: 0.3 }}
+                          whileInView={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: idx * 0.1, type: 'spring', stiffness: 400 }}
+                          whileHover={{ scale: 1.1 }}
+                          style={{
+                            width: isMobile ? '80px' : '100px',
+                            height: isMobile ? '80px' : '100px',
+                            borderRadius: '1rem',
+                            overflow: 'hidden',
+                            boxShadow: '0 8px 25px rgba(0, 240, 255, 0.3)',
+                            border: '2px solid var(--accent-primary)',
+                            backdropFilter: 'blur(10px)',
+                            position: 'relative',
+                            cursor: 'pointer',
+                            textDecoration: 'none'
+                          }}
+                        >
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover'
+                            }}
+                          />
+                          <motion.div
+                            animate={{ 
+                              background: [
+                                'rgba(0, 240, 255, 0)',
+                                'rgba(0, 240, 255, 0.15)',
+                                'rgba(0, 240, 255, 0)'
+                              ]
+                            }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              pointerEvents: 'none'
+                            }}
+                          />
+                          <motion.div
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              background: 'rgba(0, 0, 0, 0.5)',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              opacity: 0,
+                              transition: 'opacity 0.3s'
+                            }}
+                            whileHover={{ opacity: 1 }}
+                          >
+                            <span style={{
+                              color: 'var(--accent-primary)',
+                              fontSize: '0.7rem',
+                              fontWeight: 600,
+                              textAlign: 'center',
+                              padding: '0.5rem'
+                            }}>
+                              {project.title}
+                            </span>
+                          </motion.div>
+                        </motion.a>
+                      ))}
+                  </motion.div>
+                )}
               </motion.div>
             </motion.div>
           );
