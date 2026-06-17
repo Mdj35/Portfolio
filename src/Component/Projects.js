@@ -6,6 +6,7 @@ import hcdc from "./hcdc.jpg";
 import skonnect from "./skonnect.png";
 import compass from "./compass.jpeg";
 import accessionx from "./accessionx.jpg"
+import dswd from "./logo.png";
 
 
 const projects = [
@@ -70,6 +71,15 @@ const projects = [
     description: '',
     image: accessionx,
     link: 'https://accession-x.vercel.app',
+    animation: projectAnimation,
+  },
+  {
+    id: 8,
+    title: 'DSWD - Regional Performance Management System',
+    category: 'Internship',
+    description: '',
+    image: dswd,
+    link: 'https://dswd-landing.vercel.app/',
     animation: projectAnimation,
   }
 ];

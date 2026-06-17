@@ -21,10 +21,10 @@ const experiences = [
     id: 3,
     company: "Department of Social Welfare and Development (DSWD)",
     position: "Fullstack Developer - Intern",
-    duration: "February 2026 - Present",
+    duration: "February 2026 - May 2026",
     description: "Fullstack Developer Intern responsible for building and maintaining web applications using Laravel backend and React frontend, with MySQL database management. Contributed to developing features and improving application performance.",
     skills: ["Laravel", "MySQL", "React"],
-    projectIds: [], // SKonnect
+    projectIds: [8], // SKonnect
   },
 ];
 

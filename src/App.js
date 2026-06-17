@@ -22,6 +22,7 @@ import ParticleBackground from './Component/ParticleBackground';
 import VideoScroll from './Component/VideoScroll';
 import ExperienceSection from './Component/ExperienceSection';
 import myVideo from './Component/download.mp4';
+import Scroll3DWrapper from './Component/Scroll3DWrapper';
 
 
 const App = () => {
@@ -327,81 +328,153 @@ const App = () => {
       ) : (
         <>
           <Container>
-            <AboutSection />
+            <Scroll3DWrapper>
+              <AboutSection />
+            </Scroll3DWrapper>
           </Container>
 
           <VideoScroll videoSrc={myVideo} />
 
           <Container>
+            <Scroll3DWrapper>
+              <ProjectsSection id="projects">
+                <motion.div className="bg-orb bg-orb-2" style={{ y: orb1Y, animation: 'float 10s ease-in-out infinite' }} />
 
-            <ProjectsSection id="projects">
-              <motion.div className="bg-orb bg-orb-2" style={{ y: orb1Y, animation: 'float 10s ease-in-out infinite' }} />
+                <motion.div
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportSettings}
+                  variants={sectionHeaderVariants}
+                  style={{ textAlign: 'center', marginBottom: '4rem', position: 'relative', zIndex: 2 }}
+                >
+                  <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
+                    My Projects
+                  </h2>
+                  <p className="text-gradient" style={{ fontSize: '1.2rem', fontWeight: 600 }}>
+                    Some Of My Distinguished Works
+                  </p>
+                </motion.div>
 
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewportSettings}
-                variants={sectionHeaderVariants}
-                style={{ textAlign: 'center', marginBottom: '4rem', position: 'relative', zIndex: 2 }}
-              >
-                <h2 style={{ fontSize: '2.5rem', fontWeight: '800', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>
-                  My Projects
-                </h2>
-                <p className="text-gradient" style={{ fontSize: '1.2rem', fontWeight: 600 }}>
-                  Some Of My Distinguished Works
-                </p>
-              </motion.div>
+                <motion.div variants={sectionHeaderVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem', position: 'relative', zIndex: 2 }}>
+                  {['All', 'Capstone', 'IM', 'Freelance', 'Other Projects', 'Internship'].map(filter => (
+                    <motion.button
+                      key={filter}
+                      onClick={() => setProjectFilter(filter)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      style={{
+                        padding: '0.6rem 1.5rem',
+                        borderRadius: '30px',
+                        border: `1px solid ${projectFilter === filter ? 'rgba(0, 240, 255, 0.4)' : 'var(--surface-border)'}`,
+                        background: projectFilter === filter ? 'rgba(0, 240, 255, 0.1)' : 'var(--surface-glass)',
+                        color: projectFilter === filter ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                        boxShadow: projectFilter === filter ? '0 0 15px rgba(0, 240, 255, 0.2)' : 'none',
+                        backdropFilter: 'blur(5px)'
+                      }}
+                    >
+                      {filter}
+                    </motion.button>
+                  ))}
+                </motion.div>
 
-              <motion.div variants={sectionHeaderVariants} style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem', position: 'relative', zIndex: 2 }}>
-                {['All', 'Capstone', 'IM', 'Freelance', 'Other Projects'].map(filter => (
-                  <motion.button
-                    key={filter}
-                    onClick={() => setProjectFilter(filter)}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    style={{
-                      padding: '0.6rem 1.5rem',
-                      borderRadius: '30px',
-                      border: `1px solid ${projectFilter === filter ? 'rgba(0, 240, 255, 0.4)' : 'var(--surface-border)'}`,
-                      background: projectFilter === filter ? 'rgba(0, 240, 255, 0.1)' : 'var(--surface-glass)',
-                      color: projectFilter === filter ? 'var(--accent-primary)' : 'var(--text-secondary)',
-                      fontWeight: 600,
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease',
-                      boxShadow: projectFilter === filter ? '0 0 15px rgba(0, 240, 255, 0.2)' : 'none',
-                      backdropFilter: 'blur(5px)'
-                    }}
-                  >
-                    {filter}
-                  </motion.button>
-                ))}
-              </motion.div>
+                <motion.div
+                  className="projects-grid"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportSettings}
+                  variants={staggerContainer}
+                  style={{
+                    position: 'relative',
+                    zIndex: 2,
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                    gap: '2.5rem',
+                    alignItems: 'stretch'
+                  }}
+                >
+                  <AnimatePresence mode="popLayout">
+                    {projects.filter(p => projectFilter === 'All' || p.category === projectFilter).map((project, index) => (
+                      <motion.div
+                        key={project.id}
+                        layout
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.3 }}
+                        className="glass-panel"
+                        variants={popInVariants}
+                        whileHover={{
+                          y: -15,
+                          scale: 1.03,
+                          boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
+                          borderColor: 'rgba(108, 99, 255, 0.6)'
+                        }}
+                        onClick={() => handleProjectClick(project)}
+                        style={{
+                          cursor: 'pointer',
+                          overflow: 'hidden',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          transition: 'border-color 0.3s ease',
+                        }}
+                      >
+                        <div style={{ overflow: 'hidden', height: '220px' }}>
+                          <motion.img
+                            src={project.image}
+                            alt={project.title}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            whileHover={{ scale: 1.15 }}
+                            transition={{ duration: 0.6 }}
+                          />
+                        </div>
+                        <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                          <span style={{ color: 'var(--accent-primary)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem' }}>
+                            {project.category || 'Development'}
+                          </span>
+                          <h3 style={{ fontSize: '1.4rem', margin: '0 0 1rem', color: 'var(--text-primary)' }}>{project.title}</h3>
+                          <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem' }}>
+                            View Details <span style={{ color: 'var(--accent-secondary)' }}>&rarr;</span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </motion.div>
+              </ProjectsSection>
+            </Scroll3DWrapper>
 
-              <motion.div
-                className="projects-grid"
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewportSettings}
-                variants={staggerContainer}
-                style={{
-                  position: 'relative',
-                  zIndex: 2,
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                  gap: '2.5rem',
-                  alignItems: 'stretch'
-                }}
-              >
-                <AnimatePresence mode="popLayout">
-                  {projects.filter(p => projectFilter === 'All' || p.category === projectFilter).map((project, index) => (
-                    <motion.div
-                      key={project.id}
-                      layout
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      transition={{ duration: 0.3 }}
-                      className="glass-panel"
+            <Scroll3DWrapper>
+              <ExperienceSection
+                viewportSettings={viewportSettings}
+                sectionHeaderVariants={sectionHeaderVariants}
+                staggerContainer={staggerContainer}
+              />
+            </Scroll3DWrapper>
+
+            <Scroll3DWrapper>
+              <CertificatesSection id="certificates">
+                <motion.h2
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportSettings}
+                  variants={sectionHeaderVariants}
+                >
+                  Certificates & Awards
+                </motion.h2>
+                <CertificateList
+                  as={motion.div}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportSettings}
+                  variants={staggerContainer}
+                >
+                  {certificates.map((certificate, index) => (
+                    <CertificateCard
+                      as={motion.div}
+                      key={index}
                       variants={popInVariants}
                       whileHover={{
                         y: -15,
@@ -409,114 +482,71 @@ const App = () => {
                         boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
                         borderColor: 'rgba(108, 99, 255, 0.6)'
                       }}
-                      onClick={() => handleProjectClick(project)}
-                      style={{
-                        cursor: 'pointer',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        transition: 'border-color 0.3s ease',
-                      }}
+                      style={{ cursor: 'pointer', transition: 'border-color 0.3s ease' }}
                     >
-                      <div style={{ overflow: 'hidden', height: '220px' }}>
-                        <motion.img
-                          src={project.image}
-                          alt={project.title}
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          whileHover={{ scale: 1.15 }}
-                          transition={{ duration: 0.6 }}
-                        />
+                      <img src={certificate.image} alt={certificate.title} draggable="false" />
+                      <div className="content">
+                        <h3>{certificate.title}</h3>
+                        <p>{certificate.description}</p>
                       </div>
-                      <div style={{ padding: '1.5rem', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ color: 'var(--accent-primary)', fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '0.5rem' }}>
-                          {project.category || 'Development'}
-                        </span>
-                        <h3 style={{ fontSize: '1.4rem', margin: '0 0 1rem', color: 'var(--text-primary)' }}>{project.title}</h3>
-                        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontWeight: 600, fontSize: '0.9rem' }}>
-                          View Details <span style={{ color: 'var(--accent-secondary)' }}>&rarr;</span>
-                        </div>
-                      </div>
-                    </motion.div>
+                    </CertificateCard>
                   ))}
-                </AnimatePresence>
-              </motion.div>
-            </ProjectsSection>
+                </CertificateList>
+              </CertificatesSection>
+            </Scroll3DWrapper>
 
-            <ExperienceSection 
-              viewportSettings={viewportSettings}
-              sectionHeaderVariants={sectionHeaderVariants}
-              staggerContainer={staggerContainer}
-            />
-
-            <CertificatesSection id="certificates">
-              <motion.h2
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewportSettings}
-                variants={sectionHeaderVariants}
-              >
-                Certificates & Awards
-              </motion.h2>
-              <CertificateList
-                as={motion.div}
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewportSettings}
-                variants={staggerContainer}
-              >
-                {certificates.map((certificate, index) => (
-                  <CertificateCard
-                    as={motion.div}
-                    key={index}
-                    variants={popInVariants}
-                    whileHover={{
-                      y: -15,
-                      scale: 1.03,
-                      boxShadow: '0 25px 50px rgba(0,0,0,0.6)',
-                      borderColor: 'rgba(108, 99, 255, 0.6)'
-                    }}
-                    style={{ cursor: 'pointer', transition: 'border-color 0.3s ease' }}
-                  >
-                    <img src={certificate.image} alt={certificate.title} draggable="false" />
-                    <div className="content">
-                      <h3>{certificate.title}</h3>
-                      <p>{certificate.description}</p>
-                    </div>
-                  </CertificateCard>
-                ))}
-              </CertificateList>
-            </CertificatesSection>
-
-            <ContactSection id="contact">
-              <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={viewportSettings}
-                variants={sectionHeaderVariants}
-                style={{ maxWidth: '600px', margin: '0 auto' }}
-              >
-                <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>Let's Work Together</h2>
-                <p>Feel free to reach out through any of the platforms below. I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.</p>
-
+            <Scroll3DWrapper>
+              <ContactSection id="contact">
                 <motion.div
-                  className="social-grid"
-                  style={{ marginTop: '3rem' }}
-                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={viewportSettings}
+                  variants={sectionHeaderVariants}
+                  style={{ maxWidth: '600px', margin: '0 auto' }}
                 >
-                  {[
-                    { icon: FaFacebook, link: "https://www.facebook.com/vynceian.oani.1", color: "#4267B2" },
-                    { icon: FaEnvelope, link: "https://mail.google.com/mail/?view=cm&fs=1&to=vynceian.oani@hcdc.edu.ph", color: "#D44638" },
-                    { icon: FaInstagram, link: "https://www.instagram.com/vynceian35", color: "#E1306C" },
-                    { icon: FaPhone, link: "tel:09943189625", color: "#34A853" }
-                  ].map((social, i) => (
-                    <motion.a
-                      key={i}
-                      href={social.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                  <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--text-primary)' }}>Let's Work Together</h2>
+                  <p>Feel free to reach out through any of the platforms below. I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions.</p>
+
+                  <motion.div
+                    className="social-grid"
+                    style={{ marginTop: '3rem' }}
+                    variants={staggerContainer}
+                  >
+                    {[
+                      { icon: FaFacebook, link: "https://www.facebook.com/vynceian.oani.1", color: "#4267B2" },
+                      { icon: FaEnvelope, link: "https://mail.google.com/mail/?view=cm&fs=1&to=vynceian.oani@hcdc.edu.ph", color: "#D44638" },
+                      { icon: FaInstagram, link: "https://www.instagram.com/vynceian35", color: "#E1306C" },
+                      { icon: FaPhone, link: "tel:09943189625", color: "#34A853" }
+                    ].map((social, i) => (
+                      <motion.a
+                        key={i}
+                        href={social.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="glass-panel"
+                        variants={popInVariants}
+                        whileHover={{ y: -8, scale: 1.15, boxShadow: `0 15px 30px ${social.color}33`, borderColor: social.color }}
+                        whileTap={{ scale: 0.9 }}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '60px',
+                          height: '60px',
+                          borderRadius: '50%',
+                          textDecoration: 'none',
+                          transition: 'border-color 0.3s'
+                        }}
+                      >
+                        <social.icon size={26} color={social.color} />
+                      </motion.a>
+                    ))}
+
+                    <motion.button
+                      onClick={downloadPortfolio}
                       className="glass-panel"
                       variants={popInVariants}
-                      whileHover={{ y: -8, scale: 1.15, boxShadow: `0 15px 30px ${social.color}33`, borderColor: social.color }}
+                      whileHover={{ y: -8, scale: 1.15, boxShadow: '0 15px 30px rgba(108, 99, 255, 0.4)', borderColor: 'var(--accent-primary)' }}
                       whileTap={{ scale: 0.9 }}
                       style={{
                         display: 'flex',
@@ -525,48 +555,28 @@ const App = () => {
                         width: '60px',
                         height: '60px',
                         borderRadius: '50%',
-                        textDecoration: 'none',
-                        transition: 'border-color 0.3s'
+                        border: '1px solid var(--surface-border)',
+                        cursor: 'pointer',
+                        background: 'var(--accent-primary)',
+                        color: '#fff'
                       }}
+                      title="Download Portfolio PDF"
                     >
-                      <social.icon size={26} color={social.color} />
-                    </motion.a>
-                  ))}
+                      <FaDownload size={22} />
+                    </motion.button>
+                  </motion.div>
 
-                  <motion.button
-                    onClick={downloadPortfolio}
-                    className="glass-panel"
+                  <motion.div
                     variants={popInVariants}
-                    whileHover={{ y: -8, scale: 1.15, boxShadow: '0 15px 30px rgba(108, 99, 255, 0.4)', borderColor: 'var(--accent-primary)' }}
-                    whileTap={{ scale: 0.9 }}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '60px',
-                      height: '60px',
-                      borderRadius: '50%',
-                      border: '1px solid var(--surface-border)',
-                      cursor: 'pointer',
-                      background: 'var(--accent-primary)',
-                      color: '#fff'
-                    }}
-                    title="Download Portfolio PDF"
+                    whileHover={{ scale: 1.05 }}
+                    style={{ marginTop: '3rem', display: 'inline-block', padding: '1rem 2rem', borderRadius: '30px', background: 'var(--surface-glass)', border: '1px solid var(--surface-border)', cursor: 'default' }}
                   >
-                    <FaDownload size={22} />
-                  </motion.button>
+                    <span style={{ color: 'var(--text-secondary)' }}>Prefer to call? </span>
+                    <span className="text-gradient" style={{ fontWeight: 700, fontSize: '1.2rem', marginLeft: '0.5rem' }}>09943189625</span>
+                  </motion.div>
                 </motion.div>
-
-                <motion.div
-                  variants={popInVariants}
-                  whileHover={{ scale: 1.05 }}
-                  style={{ marginTop: '3rem', display: 'inline-block', padding: '1rem 2rem', borderRadius: '30px', background: 'var(--surface-glass)', border: '1px solid var(--surface-border)', cursor: 'default' }}
-                >
-                  <span style={{ color: 'var(--text-secondary)' }}>Prefer to call? </span>
-                  <span className="text-gradient" style={{ fontWeight: 700, fontSize: '1.2rem', marginLeft: '0.5rem' }}>09943189625</span>
-                </motion.div>
-              </motion.div>
-            </ContactSection>
+              </ContactSection>
+            </Scroll3DWrapper>
 
             <Footer>
               <p>© {new Date().getFullYear()} Vynce Ian Oani. Built with React & Framer Motion.</p>
