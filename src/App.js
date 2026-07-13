@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import projects from './Component/Projects';
 import ProjectModal from './Component/ProjectModal';
-import { FaFacebook, FaInstagram, FaEnvelope, FaPhone, FaBars, FaTimes, FaDownload } from 'react-icons/fa';
+import { FaFacebook, FaInstagram, FaEnvelope, FaPhone, FaDownload, FaUser, FaLaptopCode, FaBriefcase, FaCertificate, FaHome } from 'react-icons/fa';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import certificates from './Component/Certificates';
 import splashAnimation from './splash.json';
@@ -14,8 +14,7 @@ import {
   CertificatesSection,
   CertificateList,
   CertificateCard,
-  SplashScreenWrapper,
-  Header
+  SplashScreenWrapper
 } from './Designs/Design';
 import AboutSection from './Component/AboutSection';
 import ParticleBackground from './Component/ParticleBackground';
@@ -26,8 +25,6 @@ import myVideo from './Component/download.mp4';
 
 const App = () => {
   const [splashState, setSplashState] = useState(0); // 0 = Lottie, 1 = Aenex, 2 = Main
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectFilter, setProjectFilter] = useState('All');
@@ -35,15 +32,8 @@ const App = () => {
   const videoScrollRef = React.useRef(null);
 
   // Scroll Progress Hooks
-  const { scrollY, scrollYProgress } = useScroll();
+  const { scrollYProgress } = useScroll();
   const orb1Y = useTransform(scrollYProgress, [0, 1], [0, -300]);
-
-  useEffect(() => {
-    const unsubscribe = scrollY.onChange((v) => {
-      setIsScrolled(v > 50);
-    });
-    return () => unsubscribe && unsubscribe();
-  }, [scrollY]);
 
   useEffect(() => {
     const timer1 = setTimeout(() => {
@@ -139,110 +129,116 @@ const App = () => {
 
   return (
     <>
-      {showHeader && <Header
-        className={isScrolled ? 'scrolled' : ''}
-        style={{
-          background: isScrolled ? 'var(--surface-glass)' : 'transparent',
-          boxShadow: isScrolled ? '0 10px 30px rgba(0,0,0,0.3)' : 'none',
-          borderBottom: isScrolled ? '1px solid var(--surface-border)' : '1px solid transparent',
-          padding: isScrolled ? '1rem 4rem' : '1.5rem 4rem',
-        }}
-        as={motion.header}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        <h1
-          className="text-gradient"
-          style={{
-            margin: 0,
-            fontSize: '1.5rem',
-            fontWeight: 800,
-            zIndex: 1001,
-            cursor: 'pointer'
-          }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        >
-          My Portfolio
-        </h1>
+      <AnimatePresence>
+        {showHeader && (
+          <motion.nav
+            className="floating-nav"
+            initial={{ y: 100, opacity: 0, x: '-50%' }}
+            animate={{ y: 0, opacity: 1, x: '-50%' }}
+            exit={{ y: 100, opacity: 0, x: '-50%' }}
+            transition={{ duration: 0.5, type: 'spring', stiffness: 100 }}
+            style={{
+              position: 'fixed',
+              bottom: '2rem',
+              left: '50%',
+              display: 'flex',
+              gap: '1rem',
+              padding: '0.8rem 1.5rem',
+              background: 'var(--surface-glass)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              borderRadius: '50px',
+              border: '1px solid var(--surface-border)',
+              boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+              zIndex: 1000,
+            }}
+          >
+            {[
+              { icon: FaHome, link: '#', name: 'Home' },
+              { icon: FaUser, link: '#about', name: 'About' },
+              { icon: FaLaptopCode, link: '#projects', name: 'Projects' },
+              { icon: FaBriefcase, link: '#experience', name: 'Experience' },
+              { icon: FaCertificate, link: '#certificates', name: 'Certificates' },
+              { icon: FaEnvelope, link: '#contact', name: 'Contact' },
+            ].map((item, index) => (
+              <a
+                key={index}
+                className="floating-nav-item"
+                href={item.link}
+                title={item.name}
+                onClick={(e) => {
+                  if (item.name === 'Home') {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+                style={{
+                  color: 'var(--text-secondary)',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                  position: 'relative',
+                  background: 'transparent'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.color = 'var(--accent-primary)';
+                  e.currentTarget.style.background = 'rgba(108, 99, 255, 0.1)';
+                  e.currentTarget.style.transform = 'translateY(-8px) scale(1.1)';
+                  e.currentTarget.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.color = 'var(--text-secondary)';
+                  e.currentTarget.style.background = 'transparent';
+                  e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <item.icon className="nav-icon" size={22} />
+              </a>
+            ))}
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
-        <nav
-          className="desktop-nav"
-          style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}
-        >
-          {['About', 'Projects', 'Experience', 'Certificates', 'Contact'].map((item) => (
-            <a
-              key={item}
-              style={{
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                fontWeight: 600,
-                fontSize: '0.95rem',
-                transition: 'color 0.3s ease',
-              }}
-              href={`#${item.toLowerCase()}`}
-              onMouseOver={(e) => e.currentTarget.style.color = 'var(--accent-primary)'}
-              onMouseOut={(e) => e.currentTarget.style.color = 'var(--text-primary)'}
-            >
-              {item}
-            </a>
-          ))}
-        </nav>
-
-        <div
-          className="mobile-menu-icon"
-          style={{ cursor: 'pointer', zIndex: 1001, display: 'none' }}
-          onClick={() => setMenuOpen((prev) => !prev)}
-        >
-          {menuOpen ? <FaTimes size={24} color="#fff" /> : <FaBars size={24} color="#fff" />}
-        </div>
-
-        {/* Mobile Dropdown */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={menuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          style={{
-            position: 'absolute',
-            top: '100%',
-            left: 0,
-            right: 0,
-            background: 'var(--bg-secondary)',
-            borderBottom: '1px solid var(--surface-border)',
-            display: menuOpen ? 'flex' : 'none',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '1.5rem',
-            padding: '2rem 0',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
-            zIndex: 1000,
-          }}
-        >
-          {['About', 'Projects', 'Experience', 'Certificates', 'Contact'].map((item) => (
-            <a
-              key={item}
-              onClick={() => setMenuOpen(false)}
-              href={`#${item.toLowerCase()}`}
-              style={{
-                color: 'var(--text-primary)',
-                textDecoration: 'none',
-                fontSize: '1.2rem',
-                fontWeight: 600
-              }}
-            >
-              {item}
-            </a>
-          ))}
-        </motion.div>
-
-        <style>{`
-          @media screen and (max-width: 768px) {
-            .desktop-nav { display: none !important; }
-            .mobile-menu-icon { display: flex !important; margin-left: auto; }
-            header { padding: 1rem 1.5rem !important; }
+      <style>{`
+        @media screen and (max-width: 768px) {
+          .floating-nav {
+            bottom: 1.5rem !important;
+            padding: 0.6rem 1rem !important;
+            gap: 0.5rem !important;
+            width: max-content;
+            max-width: 90vw;
           }
-        `}</style>
-      </Header>}
+          .floating-nav-item {
+            width: 40px !important;
+            height: 40px !important;
+          }
+          .nav-icon {
+            width: 18px !important;
+            height: 18px !important;
+          }
+        }
+        @media screen and (max-width: 480px) {
+          .floating-nav {
+            bottom: 1rem !important;
+            padding: 0.5rem 0.5rem !important;
+            gap: 0.25rem !important;
+          }
+          .floating-nav-item {
+            width: 36px !important;
+            height: 36px !important;
+          }
+          .nav-icon {
+            width: 16px !important;
+            height: 16px !important;
+          }
+        }
+      `}</style>
 
       <ParticleBackground />
 
