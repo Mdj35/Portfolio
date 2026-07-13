@@ -1,11 +1,26 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { useScroll, useSpring, useTransform } from 'framer-motion';
+
+import BackgroundEffects from './VideoScroll/BackgroundEffects';
+import Scene from './VideoScroll/Scene';
+import ProjectCard from './VideoScroll/ProjectCard';
+import ScrollIndicator from './VideoScroll/ScrollIndicator';
+
 import sample from './sample.jpg';
 import church from './1.png';
 import alampat from './alampat.png';
 import hcdc from "./hcdc.jpg";
 import skonnect from "./skonnect.png";
 import compass from "./compass.jpeg";
+
+const projectsData = [
+  { id: 1, image: sample, title: "Chic Station", category: "Web Design", description: "A beautifully crafted web experience focusing on seamless interactions.", tech: ["React", "Framer Motion"], top: '10%', left: '5%', bottom: 'auto', right: 'auto', zIndex: 1 },
+  { id: 2, image: church, title: "Our Lady Of Guadalupe Parish", category: "Full-Stack", description: "A comprehensive portal for community engagement and events.", tech: ["Next.js", "Tailwind"], top: 'auto', left: 'auto', bottom: '15%', right: '10%', zIndex: 2 },
+  { id: 3, image: alampat, title: "Alampat", category: "Full-Stack", description: "Modern storefront with dynamic cart and checkout flows.", tech: ["React", "Node.js"], top: '40%', left: '10%', bottom: 'auto', right: 'auto', zIndex: 3 },
+  { id: 4, image: hcdc, title: "HCDC Website", category: "Dashboard", description: "Internal management system for tracking student and faculty records.", tech: ["React", "Firebase"], top: 'auto', left: 'auto', bottom: '10%', right: '25%', zIndex: 1 },
+  { id: 5, image: skonnect, title: "SKonnect", category: "Social Platform", description: "Connecting users through real-time chat and interactive feeds.", tech: ["React Native", "Socket.io"], top: '20%', left: 'auto', bottom: 'auto', right: '5%', zIndex: 2 },
+  { id: 6, image: compass, title: "Compass", category: "Utility", description: "A navigation tool with advanced routing and location tracking.", tech: ["React", "Maps API"], top: '60%', left: '5%', bottom: 'auto', right: 'auto', zIndex: 3 }
+];
 
 const VideoScroll = () => {
   const containerRef = useRef(null);
@@ -16,183 +31,142 @@ const VideoScroll = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setScreenSize({
-        width: window.innerWidth,
-        height: window.innerHeight
-      });
+      setScreenSize({ width: window.innerWidth, height: window.innerHeight });
     };
-
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Responsive values based on screen size
   const isMobile = screenSize.width < 768;
-  const isTablet = screenSize.width >= 768 && screenSize.width < 1024;
 
-  const getTitleSize = () => {
-    if (isMobile) return '2rem';
-    if (isTablet) return '3rem';
-    return '4.5rem';
-  };
+  // 800vh ensures a long enough scroll for 6 distinct scenes
+  const getContainerHeight = () => isMobile ? '800vh' : '900vh';
 
-  const getSubtitleSize = () => {
-    if (isMobile) return '0.9rem';
-    if (isTablet) return '1.2rem';
-    return '1.5rem';
-  };
-
-  const getMainTitleSize = () => {
-    if (isMobile) return '2.5rem';
-    if (isTablet) return '3.5rem';
-    return '5rem';
-  };
-
-  const getImageSize = (baseSize) => {
-    if (isMobile) return Math.round(baseSize * 0.5);
-    if (isTablet) return Math.round(baseSize * 0.75);
-    return baseSize;
-  };
-
-  const getContainerHeight = () => {
-    if (isMobile) return '500vh';
-    if (isTablet) return '450vh';
-    return '400vh';
-  };
-
-  // Tracks the overall scroll of the 300vh container (starts at 0 when top is hit, ends at 1 when bottom is hit)
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
 
-  // Apply physics spring for that buttery-smooth Shopify-style scroll
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 70,
-    damping: 25,
+    stiffness: 60,
+    damping: 20,
     restDelta: 0.001
   });
 
-  // ================= SCENE 1 =================
-  // fades in at 0, max at 10%, fades out by 30%
-  const opacity1 = useTransform(smoothProgress, [0, 0.1, 0.2, 0.3], [0, 1, 1, 0]);
-  const scale1 = useTransform(smoothProgress, [0, 0.3], [0.8, 1.3]);
-  const y1 = useTransform(smoothProgress, [0, 0.3], [50, -50]);
+  // SCENES MAPPING (6 Scenes evenly distributed across 0 to 1)
+  // Scene 1: 0.00 - 0.15
+  const s1_opacity = useTransform(smoothProgress, [0, 0.05, 0.12, 0.15], [0, 1, 1, 0]);
+  const s1_scale = useTransform(smoothProgress, [0, 0.15], [0.8, 1.2]);
+  const s1_y = useTransform(smoothProgress, [0, 0.15], [50, -50]);
+  const s1_filter = useTransform(smoothProgress, [0, 0.05, 0.12, 0.15], ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)']);
 
-  // ================= SCENE 2 =================
-  // fades in by 40%, out by 65%
-  const opacity2 = useTransform(smoothProgress, [0.35, 0.45, 0.55, 0.65], [0, 1, 1, 0]);
-  const scale2 = useTransform(smoothProgress, [0.35, 0.65], [0.9, 1.2]);
-  const y2 = useTransform(smoothProgress, [0.35, 0.65], [100, -100]);
+  // Scene 2: 0.15 - 0.30
+  const s2_opacity = useTransform(smoothProgress, [0.15, 0.20, 0.27, 0.30], [0, 1, 1, 0]);
+  const s2_scale = useTransform(smoothProgress, [0.15, 0.30], [0.8, 1.2]);
+  const s2_y = useTransform(smoothProgress, [0.15, 0.30], [50, -50]);
+  const s2_filter = useTransform(smoothProgress, [0.15, 0.20, 0.27, 0.30], ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)']);
 
-  // ================= SCENE 3 =================
-  // text enters from 0.65 to 0.75
-  const opacity3 = useTransform(smoothProgress, [0.65, 0.75, 1], [0, 1, 1]);
-  const scale3 = useTransform(smoothProgress, [0.65, 0.75], [0.9, 1.1]);
-  const y3 = useTransform(smoothProgress, [0.65, 0.75], [150, 0]);
-  
-  // Progress bar fills strictly AFTER the text is on-screen (0.75 to 0.9)
-  const progressBarWidth = useTransform(smoothProgress, [0.75, 0.9], ["0%", "100%"]);
+  // Scene 3: 0.30 - 0.45
+  const s3_opacity = useTransform(smoothProgress, [0.30, 0.35, 0.42, 0.45], [0, 1, 1, 0]);
+  const s3_scale = useTransform(smoothProgress, [0.30, 0.45], [0.8, 1.2]);
+  const s3_y = useTransform(smoothProgress, [0.30, 0.45], [50, -50]);
+  const s3_filter = useTransform(smoothProgress, [0.30, 0.35, 0.42, 0.45], ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)']);
 
-  // ================= SHOPIFY-STYLE LAYERED PARALLAX =================
-  const bgScale = useTransform(smoothProgress, [0, 1], [1, 1.1]); // Subtle background breath
+  // Scene 4: 0.45 - 0.60
+  const s4_opacity = useTransform(smoothProgress, [0.45, 0.50, 0.57, 0.60], [0, 1, 1, 0]);
+  const s4_scale = useTransform(smoothProgress, [0.45, 0.60], [0.8, 1.2]);
+  const s4_y = useTransform(smoothProgress, [0.45, 0.60], [50, -50]);
+  const s4_filter = useTransform(smoothProgress, [0.45, 0.50, 0.57, 0.60], ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)']);
 
-  // Cards float up at highly varied speeds, simulating 3D depth
-  const img1Y = useTransform(smoothProgress, [0, 1], [300, -800]); 
-  const img1Rotate = useTransform(smoothProgress, [0, 1], [-10, 15]);
+  // Scene 5: 0.60 - 0.75
+  const s5_opacity = useTransform(smoothProgress, [0.60, 0.65, 0.72, 0.75], [0, 1, 1, 0]);
+  const s5_scale = useTransform(smoothProgress, [0.60, 0.75], [0.8, 1.2]);
+  const s5_y = useTransform(smoothProgress, [0.60, 0.75], [50, -50]);
+  const s5_filter = useTransform(smoothProgress, [0.60, 0.65, 0.72, 0.75], ['blur(10px)', 'blur(0px)', 'blur(0px)', 'blur(10px)']);
 
-  const img2Y = useTransform(smoothProgress, [0, 1], [800, -400]);
-  const img2Rotate = useTransform(smoothProgress, [0, 1], [5, -20]);
+  // Scene 6 (Final): 0.75 - 1.00 (Stays on screen till the end)
+  const s6_opacity = useTransform(smoothProgress, [0.75, 0.85, 1], [0, 1, 1]);
+  const s6_scale = useTransform(smoothProgress, [0.75, 1], [0.8, 1.05]);
+  const s6_y = useTransform(smoothProgress, [0.75, 1], [50, 0]);
+  const s6_filter = useTransform(smoothProgress, [0.75, 0.85, 1], ['blur(10px)', 'blur(0px)', 'blur(0px)']);
 
-  const img3Y = useTransform(smoothProgress, [0, 1], [500, -1200]);
-  const img3Rotate = useTransform(smoothProgress, [0, 1], [-5, -15]);
 
-  const img4Y = useTransform(smoothProgress, [0, 1], [1200, -600]);
-  const img4Rotate = useTransform(smoothProgress, [0, 1], [15, -5]);
+  // PROJECT CARDS MAPPING
+  // Each card floats up at different speeds over the entire scroll duration
+  const p1_y = useTransform(smoothProgress, [0, 1], [500, -1000]);
+  const p1_rotate = useTransform(smoothProgress, [0, 1], [-10, 15]);
+  const p1_scale = useTransform(smoothProgress, [0, 0.5, 1], [0.8, 1.1, 0.9]);
+  const p1_opacity = useTransform(smoothProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
 
-  const img5Y = useTransform(smoothProgress, [0, 1], [600, -900]);
-  const img5Rotate = useTransform(smoothProgress, [0, 1], [-20, 10]);
+  const p2_y = useTransform(smoothProgress, [0, 1], [800, -600]);
+  const p2_rotate = useTransform(smoothProgress, [0, 1], [5, -20]);
+  const p2_scale = useTransform(smoothProgress, [0, 0.5, 1], [0.7, 1, 0.8]);
+  const p2_opacity = useTransform(smoothProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
 
-  // Overall opacity for floating images (fade out towards the very end to spotlight the progress bar)
-  const floatOpacity = useTransform(smoothProgress, [0, 0.8, 1], [0.4, 0.4, 0]);
+  const p3_y = useTransform(smoothProgress, [0, 1], [1000, -1200]);
+  const p3_rotate = useTransform(smoothProgress, [0, 1], [-5, -15]);
+  const p3_scale = useTransform(smoothProgress, [0, 0.5, 1], [0.9, 1.2, 1]);
+  const p3_opacity = useTransform(smoothProgress, [0, 0.3, 0.9, 1], [0, 1, 1, 0]);
+
+  const p4_y = useTransform(smoothProgress, [0, 1], [1200, -400]);
+  const p4_rotate = useTransform(smoothProgress, [0, 1], [15, -5]);
+  const p4_scale = useTransform(smoothProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
+  const p4_opacity = useTransform(smoothProgress, [0, 0.4, 0.9, 1], [0, 1, 1, 0]);
+
+  const p5_y = useTransform(smoothProgress, [0, 1], [1500, -800]);
+  const p5_rotate = useTransform(smoothProgress, [0, 1], [-20, 10]);
+  const p5_scale = useTransform(smoothProgress, [0, 0.5, 1], [0.7, 1.1, 0.9]);
+  const p5_opacity = useTransform(smoothProgress, [0, 0.5, 0.9, 1], [0, 1, 1, 0]);
+
+  const p6_y = useTransform(smoothProgress, [0, 1], [1800, -500]);
+  const p6_rotate = useTransform(smoothProgress, [0, 1], [10, -10]);
+  const p6_scale = useTransform(smoothProgress, [0, 0.5, 1], [0.8, 1.1, 0.9]);
+  const p6_opacity = useTransform(smoothProgress, [0, 0.6, 0.9, 1], [0, 1, 1, 0]);
+
+  const projectAnimations = [
+    { y: p1_y, rotate: p1_rotate, scale: p1_scale, opacity: p1_opacity },
+    { y: p2_y, rotate: p2_rotate, scale: p2_scale, opacity: p2_opacity },
+    { y: p3_y, rotate: p3_rotate, scale: p3_scale, opacity: p3_opacity },
+    { y: p4_y, rotate: p4_rotate, scale: p4_scale, opacity: p4_opacity },
+    { y: p5_y, rotate: p5_rotate, scale: p5_scale, opacity: p5_opacity },
+    { y: p6_y, rotate: p6_rotate, scale: p6_scale, opacity: p6_opacity },
+  ];
 
   return (
-    // 400vh forces the user to scroll for 4 full screen-heights before they pass this section
     <div ref={containerRef} style={{ height: getContainerHeight(), position: 'relative' }}>
-      
-      {/* Sticky section anchors to the top while you scroll within the 400vh container */}
+
+      {/* Sticky Scroll Area */}
       <div style={{ position: 'sticky', top: 0, height: '100vh', width: '100%', overflow: 'hidden', background: 'var(--bg-primary)' }}>
-        
-        {/* PARALLAX LAYER 1: Deep Background */}
-        <motion.div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
-          background: 'radial-gradient(circle at center, var(--bg-tertiary) 0%, var(--bg-primary) 100%)',
-          scale: bgScale,
-          transformOrigin: 'center center',
-          zIndex: 0
-        }} />
 
-        {/* SHOPIFY-STYLE PARALLAX IMAGES */}
-        <motion.div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: floatOpacity, zIndex: 1, pointerEvents: 'none' }}>
-          {/* Top Left, slow */}
-          <motion.img src={sample} style={{ position: 'absolute', top: '10%', left: '5%', width: `${getImageSize(300)}px`, borderRadius: '16px', y: img1Y, rotate: img1Rotate, filter: 'blur(2px) brightness(0.7)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }} />
-          
-          {/* Bottom Right, medium */}
-          <motion.img src={church} style={{ position: 'absolute', top: '70%', right: '10%', width: `${getImageSize(400)}px`, borderRadius: '16px', y: img2Y, rotate: img2Rotate, filter: 'blur(0px) brightness(0.8)', boxShadow: '0 30px 60px rgba(0,0,0,0.6)' }} />
-          
-          {/* Middle Left, super fast */}
-          <motion.img src={alampat} style={{ position: 'absolute', top: '40%', left: '15%', width: `${getImageSize(250)}px`, borderRadius: '16px', y: img3Y, rotate: img3Rotate, filter: 'blur(1px) brightness(0.6)', boxShadow: '0 15px 30px rgba(0,0,0,0.4)' }} />
-          
-          {/* Very Bottom Right, huge and slow */}
-          <motion.img src={hcdc} style={{ position: 'absolute', top: '90%', right: '25%', width: `${getImageSize(500)}px`, borderRadius: '16px', y: img4Y, rotate: img4Rotate, filter: 'blur(4px) brightness(0.5)', boxShadow: '0 25px 50px rgba(0,0,0,0.7)' }} />
+        {/* Modern UI Background Effects */}
+        <BackgroundEffects smoothProgress={smoothProgress} />
 
-          {/* Top Right, fast */}
-          <motion.img src={skonnect} style={{ position: 'absolute', top: '20%', right: '5%', width: `${getImageSize(280)}px`, borderRadius: '16px', y: img5Y, rotate: img5Rotate, filter: 'blur(1px) brightness(0.7)', boxShadow: '0 20px 40px rgba(0,0,0,0.5)' }} />
-          
-          {/* Extra: Center Left, medium */}
-          <motion.img src={compass} style={{ position: 'absolute', top: '60%', left: '5%', width: `${getImageSize(320)}px`, borderRadius: '16px', y: img5Y, rotate: img1Rotate, filter: 'blur(3px) brightness(0.4)', boxShadow: '0 20px 40px rgba(0,0,0,0.6)' }} />
-        </motion.div>
-        
-        {/* PARALLAX LAYER 3: Cinematic Text Sequences */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          zIndex: 2, pointerEvents: 'none'
-        }}>
-          
-          {/* Timeline Node 1 */}
-          <motion.div style={{ opacity: opacity1, scale: scale1, y: y1, position: 'absolute', textAlign: 'center', padding: isMobile ? '0 1rem' : '0' }}>
-            <h2 style={{ fontSize: getTitleSize(), fontWeight: 900, color: 'var(--text-primary)', textShadow: '0 10px 30px rgba(0,0,0,0.8)', margin: 0, textTransform: 'uppercase', letterSpacing: isMobile ? '2px' : '4px' }}>
-              My Perspective
-            </h2>
-            <p className="text-gradient" style={{ fontSize: getSubtitleSize(), fontWeight: 600, marginTop: '1rem', letterSpacing: isMobile ? '1px' : '2px' }}>
-              Turning Complexity into Clarity
-            </p>
-          </motion.div>
+        {/* Scroll Indicator */}
+        {!isMobile && <ScrollIndicator smoothProgress={smoothProgress} />}
 
-          {/* Timeline Node 2 */}
-          <motion.div style={{ opacity: opacity2, scale: scale2, y: y2, position: 'absolute', textAlign: 'center', padding: isMobile ? '0 1rem' : '0' }}>
-            <h2 style={{ fontSize: getTitleSize(), fontWeight: 900, color: 'var(--text-primary)', textShadow: '0 10px 30px rgba(0,0,0,0.8)', margin: 0, textTransform: 'uppercase', letterSpacing: isMobile ? '2px' : '4px' }}>
-              Crafting Experiences
-            </h2>
-            <p className="text-gradient" style={{ fontSize: getSubtitleSize(), fontWeight: 600, marginTop: '1rem', letterSpacing: isMobile ? '1px' : '2px' }}>
-              Beyond the Digital Interface
-            </p>
-          </motion.div>
+        {/* Layer 2: Project Cards Parallax */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 2, pointerEvents: 'none' }}>
+          {projectsData.map((proj, idx) => (
+            <ProjectCard
+              key={proj.id}
+              project={proj}
+              isMobile={isMobile}
+              {...projectAnimations[idx]}
+            />
+          ))}
+        </div>
 
-          {/* Timeline Node 3 */}
-          <motion.div style={{ opacity: opacity3, scale: scale3, y: y3, position: 'absolute', textAlign: 'center', padding: isMobile ? '0 1rem' : '0' }}>
-            <h2 style={{ fontSize: getMainTitleSize(), fontWeight: 900, color: 'var(--accent-primary)', textShadow: '0 0 20px var(--accent-glow)', margin: 0, textTransform: 'uppercase', letterSpacing: isMobile ? '4px' : '8px' }}>
-              Explore Everything
-            </h2>
-            <p style={{ fontSize: isMobile ? '0.85rem' : '1.2rem', color: 'var(--text-secondary)', marginTop: '2rem', letterSpacing: isMobile ? '2px' : '4px', textTransform: 'uppercase' }}>
-              Scroll down to view my projects ↓
-            </p>
-            {/* Scroll Progress Indicator */}
-            <div style={{ width: isMobile ? 'calc(100vw - 2rem)' : '500px', maxWidth: '80vw', height: '4px', background: 'rgba(255, 255, 255, 0.1)', margin: '1.5rem auto 0', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--surface-border)' }}>
-              <motion.div style={{ width: progressBarWidth, height: '100%', background: 'var(--accent-primary)', boxShadow: '0 0 10px var(--accent-glow)' }} />
-            </div>
-          </motion.div>
+        {/* Layer 3: Cinematic Text Scenes */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 3, pointerEvents: 'none' }}>
+
+          <Scene title="My Perspective" subtitle="Transforming ideas into meaningful digital experiences" opacity={s1_opacity} scale={s1_scale} y={s1_y} filter={s1_filter} isMobile={isMobile} />
+          <Scene title="Designing Solutions" subtitle="Combining creativity, technology, and user experience" opacity={s2_opacity} scale={s2_scale} y={s2_y} filter={s2_filter} isMobile={isMobile} />
+          <Scene title="Building Systems" subtitle="From web applications to intelligent platforms" opacity={s3_opacity} scale={s3_scale} y={s3_y} filter={s3_filter} isMobile={isMobile} />
+          <Scene title="Exploring Innovation" subtitle="AI, automation, and modern software development" opacity={s4_opacity} scale={s4_scale} y={s4_y} filter={s4_filter} isMobile={isMobile} />
+          <Scene title="My Projects" subtitle="Real-world solutions built with passion" opacity={s5_opacity} scale={s5_scale} y={s5_y} filter={s5_filter} isMobile={isMobile} />
+
+          {/* Final Scene with progress bar override if needed */}
+          <Scene title="Explore My Work" subtitle="Scroll down to discover my projects ↓" opacity={s6_opacity} scale={s6_scale} y={s6_y} filter={s6_filter} isMobile={isMobile} />
 
         </div>
 

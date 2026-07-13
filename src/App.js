@@ -326,7 +326,9 @@ const App = () => {
             <AboutSection />
           </Container>
 
-          <VideoScroll videoSrc={myVideo} />
+          <div ref={videoScrollRef}>
+            <VideoScroll videoSrc={myVideo} />
+          </div>
 
           <Container>
             <ProjectsSection id="projects">
