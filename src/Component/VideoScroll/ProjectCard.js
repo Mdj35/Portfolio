@@ -95,12 +95,12 @@ const ProjectCard = ({ project, opacity, y, rotate, scale, isMobile }) => {
           </div>
           
           <div style={{ display: 'flex', gap: '1rem' }}>
-            <a href="#" style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>
+            <button onClick={() => {}} style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
               <FaGithub /> Code
-            </a>
-            <a href="#" style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600 }}>
+            </button>
+            <button onClick={() => {}} style={{ color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
               <FaExternalLinkAlt /> Live
-            </a>
+            </button>
           </div>
         </div>
       </motion.div>
