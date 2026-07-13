@@ -22,7 +22,6 @@ import ParticleBackground from './Component/ParticleBackground';
 import VideoScroll from './Component/VideoScroll';
 import ExperienceSection from './Component/ExperienceSection';
 import myVideo from './Component/download.mp4';
-import Scroll3DWrapper from './Component/Scroll3DWrapper';
 
 
 const App = () => {
@@ -328,16 +327,13 @@ const App = () => {
       ) : (
         <>
           <Container>
-            <Scroll3DWrapper>
-              <AboutSection />
-            </Scroll3DWrapper>
+            <AboutSection />
           </Container>
 
           <VideoScroll videoSrc={myVideo} />
 
           <Container>
-            <Scroll3DWrapper>
-              <ProjectsSection id="projects">
+            <ProjectsSection id="projects">
                 <motion.div className="bg-orb bg-orb-2" style={{ y: orb1Y, animation: 'float 10s ease-in-out infinite' }} />
 
                 <motion.div
@@ -444,17 +440,13 @@ const App = () => {
                   </AnimatePresence>
                 </motion.div>
               </ProjectsSection>
-            </Scroll3DWrapper>
 
-            <Scroll3DWrapper>
               <ExperienceSection
                 viewportSettings={viewportSettings}
                 sectionHeaderVariants={sectionHeaderVariants}
                 staggerContainer={staggerContainer}
               />
-            </Scroll3DWrapper>
 
-            <Scroll3DWrapper>
               <CertificatesSection id="certificates">
                 <motion.h2
                   initial="hidden"
@@ -493,9 +485,7 @@ const App = () => {
                   ))}
                 </CertificateList>
               </CertificatesSection>
-            </Scroll3DWrapper>
 
-            <Scroll3DWrapper>
               <ContactSection id="contact">
                 <motion.div
                   initial="hidden"
@@ -576,7 +566,6 @@ const App = () => {
                   </motion.div>
                 </motion.div>
               </ContactSection>
-            </Scroll3DWrapper>
 
             <Footer>
               <p>© {new Date().getFullYear()} Vynce Ian Oani. Built with React & Framer Motion.</p>
