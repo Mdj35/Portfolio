@@ -5,9 +5,10 @@ import alampat from './alampat.png'
 import hcdc from "./hcdc.jpg";
 import skonnect from "./skonnect.png";
 import compass from "./compass.jpeg";
-import accessionx from "./accessionx.jpg"
+import accessionx from "./accessionx.jpg";
 import dswd from "./logo.png";
-
+import dental from "./dental.jpg";
+import kers from "./kers.jpg";
 
 const projects = [
   {
@@ -81,7 +82,25 @@ const projects = [
     image: dswd,
     link: 'https://dswd-landing.vercel.app/',
     animation: projectAnimation,
-  }
+  },
+  {
+    id: 9,
+    title: 'Dr A Dental Clinic Booking System',
+    category: 'Freelance',
+    description: 'The Official Booking System of Dr A Dental Clinic',
+    image: dental,
+    link: 'https://dr-a-dental-clinic.vercel.app/',
+    animation: projectAnimation,
+  },
+  {
+    id: 10,
+    title: 'Kerson Perame\'s Portfolio',
+    category: 'Freelance',
+    description: 'The Official Portfolio of Kerson Perame',
+    image: kers,
+    link: 'https://kerson-portfolio.vercel.app/',
+    animation: projectAnimation,
+  },
 ];
 
 export default projects; 
